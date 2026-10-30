@@ -14,6 +14,51 @@ from utils import config
 
 # Tempat menyimpan rekaman Playwright Trace (file .zip; buka dengan: npx playwright show-trace <file.zip>)
 TRACE_DIR = config.ROOT / "playwright-report" / "traces"
+# Catatan test gagal: screenshot + file failures.md (dibaca QA setelah run selesai)
+SHOT_DIR = config.ROOT / "playwright-report" / "screenshots"
+FAILURE_LOG = config.ROOT / "playwright-report" / "failures.md"
+
+
+def pytest_sessionstart(session):
+    """Awal run: kosongkan catatan kegagalan lama supaya failures.md hanya berisi run terbaru."""
+    FAILURE_LOG.parent.mkdir(parents=True, exist_ok=True)
+    FAILURE_LOG.write_text("# Catatan test gagal\n\n(Kosong = semua test lolos)\n", encoding="utf-8")
+    for old in SHOT_DIR.glob("*.png") if SHOT_DIR.exists() else []:
+        old.unlink()
+
+
+def _record_failure(ctx: BrowserContext, request, safe_name: str) -> None:
+    """Test gagal -> ambil screenshot layar terakhir dan tulis ringkasannya ke failures.md.
+
+    Isi catatan: nama test, ID test case (@tc), URL saat gagal, pesan error, lokasi screenshot dan trace.
+    """
+    rep = request.node.rep_call
+    tc_marker = request.node.get_closest_marker("tc")
+    tc_id = tc_marker.args[0] if tc_marker else "-"
+    page = ctx.pages[0] if ctx.pages else None
+    shot = "-"
+    url = "-"
+    if page is not None:
+        url = page.url
+        try:
+            SHOT_DIR.mkdir(parents=True, exist_ok=True)
+            shot_path = SHOT_DIR / f"{safe_name}.png"
+            page.screenshot(path=str(shot_path), full_page=True)
+            shot = str(shot_path.relative_to(config.ROOT))
+        except Exception as exc:  # screenshot gagal jangan menutupi error test asli
+            shot = f"(screenshot gagal: {exc})"
+    # Ambil baris error yang paling berguna (maksimal 15 baris terakhir)
+    error = "\n".join(rep.longreprtext.strip().splitlines()[-15:])
+    with FAILURE_LOG.open("a", encoding="utf-8") as f:
+        f.write(
+            f"## GAGAL: {request.node.name}\n"
+            f"- Test case : {tc_id}\n"
+            f"- File      : {request.node.nodeid}\n"
+            f"- URL       : {url}\n"
+            f"- Screenshot: {shot}\n"
+            f"- Trace     : playwright-report/traces/{safe_name}.zip\n\n"
+            f"```\n{error}\n```\n\n"
+        )
 
 
 # ---------------------------------------------------------------- hasil test -> trace
@@ -37,13 +82,15 @@ def _finish(ctx: BrowserContext, request) -> None:
         retain-on-failure  -> simpan hanya untuk test yang gagal (default proyek ini)
     """
     mode = request.config.getoption("--tracing")
+    rep = getattr(request.node, "rep_call", None)
+    failed = rep is not None and rep.failed
+    # Nama file dibersihkan dari karakter aneh supaya aman di Windows
+    safe = "".join(c if c.isalnum() or c in "-_" else "_" for c in request.node.name)
+    if failed:
+        _record_failure(ctx, request, safe)  # catat rapi sebelum tab ditutup
     if mode != "off":
-        rep = getattr(request.node, "rep_call", None)
-        failed = rep is not None and rep.failed
         if mode == "on" or failed:
             TRACE_DIR.mkdir(parents=True, exist_ok=True)
-            # Nama file dibersihkan dari karakter aneh supaya aman di Windows
-            safe = "".join(c if c.isalnum() or c in "-_" else "_" for c in request.node.name)
             ctx.tracing.stop(path=str(TRACE_DIR / f"{safe}.zip"))
         else:
             ctx.tracing.stop()  # dibuang

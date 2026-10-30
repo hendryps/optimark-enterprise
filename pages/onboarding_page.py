@@ -62,3 +62,25 @@ class OnboardingPage(BasePage):
     def expect_still_on_onboarding(self) -> None:
         """Pastikan masih di halaman onboarding (form tidak lolos / tidak berpindah)."""
         expect(self.company).to_be_visible()
+
+    # --- alur lengkap akun baru (locator DIVERIFIKASI di staging, berbasis placeholder) ---
+    def complete_business_profile(self, company: str = "Kopi Senja Nusantara",
+                                  industry: str = "Kuliner & Restoran",
+                                  website: str = "https://www.kopisenja.co.id",
+                                  description: str = "Kedai kopi lokal dengan biji kopi pilihan dari petani Nusantara.",
+                                  tagline: str = "Setiap seduhan punya cerita") -> None:
+        """Isi form onboarding sampai lengkap lalu klik Finish -> masuk ke /dashboard.
+
+        Kolom wajib: nama bisnis, industri, deskripsi singkat. Tombol Finish tetap nonaktif sampai ketiganya terisi.
+        Website dan tagline opsional tapi diisi supaya datanya lengkap.
+        """
+        self.page.get_by_placeholder("Example: PT Kopi Kenangan Indonesia").fill(company)
+        # Dropdown industri adalah <select> biasa; select pertama di halaman = pilihan bahasa, jadi ambil yang berisi opsi industri
+        self.page.locator("select").filter(has_text="Select an industry").select_option(label=industry)
+        self.page.get_by_placeholder("https://www.contoh.com").fill(website)
+        self.page.locator("textarea").fill(description)
+        self.page.get_by_placeholder("Example: Kopi Kenangan - Every sip is a story").fill(tagline)
+        finish = self.page.get_by_role("button", name="Finish")
+        expect(finish).to_be_enabled()
+        finish.click()
+        expect(self.page).to_have_url(rx("/dashboard"), timeout=60000)

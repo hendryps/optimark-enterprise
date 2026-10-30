@@ -98,3 +98,17 @@ Tab `Template TC` dan `e2e-billing` di sheet masih kosong, jadi belum ada test-n
 Locator sudah diverifikasi langsung di staging untuk Login, Dashboard, Content Planner (List/Calendar),
 AI Assistant, Image Generator, dan Video Generator (halaman utama). Form **Create Post** dan **onboarding**
 belum bisa diverifikasi (butuh platform terhubung / akun baru), jadi locator-nya masih tebakan dari label di sheet.
+
+## Test auth (login, register, lupa password)
+
+| File | Isi | ID |
+|---|---|---|
+| `tests/auth/test_login.py` | Login email+password dan akun Google (positif + negatif) | `LOGIN-EP/EN/GP/GN-xx` |
+| `tests/auth/test_register.py` | Register, verifikasi email via Mailsac, onboarding sampai Dashboard | `REG-Pxx` / `REG-Nxx` |
+| `tests/auth/test_reset_password.py` | Forgot + reset password via Mailsac | `RST-Pxx` / `RST-Nxx` |
+
+- Akun Google dan password diisi di `.env` (`GOOGLE_EMAIL`, `GOOGLE_PASSWORD`). Browser tampil (`HEADLESS=false`) dengan jeda `SLOW_MO=1000`.
+- Email dummy dibuat otomatis (`utils/mailsac.py`), mis. `dimas.anggara.3110260216@mailsac.com`. Inbox Mailsac **publik**, jangan pakai data asli.
+- **Rate limit staging:** registrasi dibatasi ~15 menit ("Too many attempts"), forgot password ~60 detik per email. Kalau terkena, test di-SKIP (bukan gagal). Jalankan folder `tests/auth` cukup sekali per ~15 menit.
+- Akun yang berhasil sampai Dashboard dicatat di `playwright-report/test-data-registrasi.csv`; test gagal dicatat di `playwright-report/failures.md` (+ screenshot dan trace).
+- Report HTML: buka `playwright-report/index.html` di browser.

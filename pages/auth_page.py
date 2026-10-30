@@ -78,3 +78,82 @@ class AuthPage(BasePage):
             self.page.wait_for_url(re.compile(r"accounts\.google\.com"))
             self.page.go_back()
             expect(self.google_button).to_be_visible()
+
+    # ------------------------------------------------------------------
+    # Login email + password: elemen & aksi tambahan (dipakai tests/auth/test_login.py)
+    # ------------------------------------------------------------------
+    @property
+    def error_banner(self):
+        """Kotak merah di atas form untuk error dari server, mis. 'Invalid email or password'."""
+        return self.page.locator("div.text-red-500").first
+
+    @property
+    def show_password_button(self):
+        """Ikon mata di dalam input Password (membuka/menutup tampilan password)."""
+        return self.page.get_by_role("button", name=rx("Show password", "Hide password"))
+
+    @property
+    def forgot_password_link(self):
+        """Tautan 'Forgot password?'."""
+        return self.page.get_by_role("link", name=rx("Forgot password", "Lupa kata sandi"))
+
+    def submit(self, email: str = "", password: str = "") -> None:
+        """Isi form (kolom yang kosong dibiarkan kosong) lalu klik Sign In TANPA menunggu hasil.
+
+        Beda dengan login(): method ini dipakai untuk skenario negatif, jadi tidak
+        mengharapkan berpindah ke dashboard.
+        """
+        if email:
+            self.email.fill(email)
+        if password:
+            self.password.fill(password)
+        self.sign_in_button.click()
+
+    def expect_not_logged_in(self) -> None:
+        """Pastikan login TIDAK berhasil: masih di /login dan form Sign In masih tampil."""
+        self.expect_url_contains("/login")
+        expect(self.sign_in_button).to_be_visible()
+
+    # ------------------------------------------------------------------
+    # Login Google: langkah-langkah di halaman accounts.google.com
+    # ------------------------------------------------------------------
+    @property
+    def google_email_input(self):
+        """Kolom 'Email or phone' di halaman Google."""
+        return self.page.get_by_role("textbox", name=rx("Email or phone", "Email atau ponsel"))
+
+    @property
+    def google_password_input(self):
+        """Kolom 'Enter your password' di halaman Google."""
+        return self.page.get_by_role("textbox", name=rx("Enter your password", "Masukkan sandi Anda"))
+
+    @property
+    def google_next_button(self):
+        """Tombol 'Next' / 'Berikutnya' di halaman Google."""
+        return self.page.get_by_role("button", name=rx("Next", "Berikutnya", exact=True))
+
+    def go_to_google_signin(self) -> None:
+        """Dari /login klik 'Continue with Google' sampai halaman Google tampil."""
+        self.open_login()
+        self.google_button.click()
+        self.page.wait_for_url(re.compile(r"accounts\.google\.com"), timeout=30000)
+        expect(self.google_email_input).to_be_visible(timeout=30000)
+
+    def google_enter_email(self, email: str) -> None:
+        """Langkah 1 di Google: isi email lalu klik Next."""
+        self.google_email_input.fill(email)
+        self.google_next_button.click()
+
+    def google_enter_password(self, password: str) -> None:
+        """Langkah 2 di Google: isi password lalu klik Next (hanya muncul kalau email dikenal)."""
+        expect(self.google_password_input).to_be_visible(timeout=30000)
+        self.google_password_input.fill(password)
+        self.google_next_button.click()
+
+    def login_with_google(self, email: str, password: str) -> None:
+        """Alur lengkap login Google sampai kembali ke aplikasi Optimark."""
+        self.go_to_google_signin()
+        self.google_enter_email(email)
+        self.google_enter_password(password)
+        # Setelah Google menerima akun, browser dikembalikan ke staging Optimark
+        expect(self.page).to_have_url(rx("/dashboard", "/onboarding"), timeout=60000)

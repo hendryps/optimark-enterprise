@@ -11,8 +11,8 @@ load_dotenv(ROOT / ".env")
 
 # --- Pengaturan umum ---
 BASE_URL = os.getenv("BASE_URL", "https://staging.app.optimark.ai").rstrip("/")
-HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"  # true = browser tidak tampil
-SLOW_MO = int(os.getenv("SLOW_MO", "0"))  # jeda per aksi (ms), berguna untuk debugging
+HEADLESS = os.getenv("HEADLESS", "false").lower() == "true"  # default false = browser TAMPIL; true = tidak tampil
+SLOW_MO = int(os.getenv("SLOW_MO", "1000"))  # jeda per aksi (ms); 1000 = 1 detik supaya jalannya test terlihat
 DEFAULT_TIMEOUT_MS = int(os.getenv("DEFAULT_TIMEOUT_MS", "10000"))  # batas tunggu aksi biasa
 GENERATE_TIMEOUT_MS = int(os.getenv("GENERATE_TIMEOUT_MS", "240000"))  # batas tunggu AI generate
 VIDEO_FILE = os.getenv("VIDEO_FILE", "")  # path MP4 valid (opsional)
@@ -26,6 +26,7 @@ ACCOUNTS = {
     "default": "USER",  # akun QA utama
     "user_b": "USER_B",  # akun kedua (isolasi data)
     "new_user": "NEW_USER",  # akun belum onboarding
+    "google": "GOOGLE",  # akun Google untuk tes "Continue with Google" (GOOGLE_EMAIL / GOOGLE_PASSWORD)
 }
 
 
