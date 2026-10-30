@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+playwright-report/
+node_modules/
+auth/
+.playwright-mcp/
+
+QA-tests/.qa-catalog/auth.local.json
+QA-tests/.qa-catalog/state/
+.claude/settings.local.json
