@@ -1,7 +1,7 @@
 # Optimark E2E: Playwright + Python
 
 Automation untuk Google Sheet **"End to End Testing - Test Case Optimark"**, dijalankan di **staging**
-(`https://staging.app.optimark.ai`). Setiap test ditautkan ke ID di sheet lewat `@tc("E2E-03-10")`.
+(`https://staging.app.optimark.ai`). Setiap test ditautkan ke ID di sheet lewat `@tc("DASH-10")`.
 
 ## Setup
 
@@ -19,7 +19,7 @@ copy .env.example .env      # isi USER_EMAIL / USER_PASSWORD (file .env tidak di
 pytest                                  # run aman (default)
 pytest tests/dashboard                  # satu menu (satu folder)
 pytest -m dashboard                     # per modul: auth onboarding dashboard composer assistant image video seo media_library brand_hub campaign billing
-pytest -k "E2E-03-10" --co              # cari berdasarkan nama
+pytest -k "DASH-10" --co              # cari berdasarkan nama
 pytest -m consumes_tokens               # test yang MEMAKAI TOKEN asli (butuh saldo)
 pytest -m destructive                   # test yang mengubah data permanen (onboarding, post terjadwal)
 HEADLESS=false pytest -k 04_15          # lihat browsernya
@@ -50,11 +50,11 @@ Lima menu sidebar ini belum punya test case di sheet, jadi test-nya dibuat dari 
 
 | Menu | File test | ID |
 |---|---|---|
-| SEO | `test_e2e_seo.py` | E2E-08-xx |
-| Media Library | `test_e2e_media_library.py` | E2E-09-xx |
-| Brand Hub | `test_e2e_brand_hub.py` | E2E-10-xx |
-| Campaign | `test_e2e_campaign.py` | E2E-11-xx |
-| Billing | `test_e2e_billing.py` | E2E-12-xx |
+| SEO | `test_e2e_seo.py` | SEO-xx |
+| Media Library | `test_e2e_media_library.py` | MEDIA-xx |
+| Brand Hub | `test_e2e_brand_hub.py` | BRAND-xx |
+| Campaign | `test_e2e_campaign.py` | CAMP-xx |
+| Billing | `test_e2e_billing.py` | BILL-xx |
 
 ## Arti status di hasil run
 
@@ -74,7 +74,7 @@ Test kebalikannya (`unfunded`, `unconnected`, `no_content`) hanya jalan saat aku
 
 | Variabel | Dipakai untuk |
 |---|---|
-| `USER_B_EMAIL/PASSWORD` | Isolasi data antar akun (E2E-05-21, 06-30, 07-36) |
+| `USER_B_EMAIL/PASSWORD` | Isolasi data antar akun (ASST-21, IMG-30, VID-36) |
 | `NEW_USER_EMAIL/PASSWORD` | Akun BELUM onboarding: seluruh `test_e2e_onboarding` (di-skip tanpa ini) |
 | `VIDEO_FILE` | Path MP4 valid untuk upload video di Composer |
 

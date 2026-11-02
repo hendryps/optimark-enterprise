@@ -1,4 +1,4 @@
-"""Sheet 'e2e-video generator' (E2E-07-01 .. 07-41).
+"""Sheet 'e2e-video generator' (VID-01 .. VID-41).
 
 Sama seperti Image Generator: akun QA saldo 0 sehingga test yang menghasilkan video memakai
 `funded` + tokens=True (jalankan sengaja dengan -m consumes_tokens). Konfigurasi video di
@@ -17,7 +17,7 @@ NEED_TOKEN = "Butuh saldo token untuk generate video"
 PLAY_BUG = "Video di tab Explore tidak terputar"
 
 
-@tc("E2E-07-01")
+@tc("VID-01")
 def test_07_01_akses_halaman(video_gen):
     """Explore/History, galeri, prompt, upload gambar, konfigurasi, audio, token, dan Generate tampil."""
     page = video_gen.page
@@ -32,7 +32,7 @@ def test_07_01_akses_halaman(video_gen):
     expect(video_gen.generate_button).to_be_visible()
 
 
-@tc("E2E-07-02")
+@tc("VID-02")
 def test_07_02_tab_jelajahi(video_gen):
     """Explore aktif dan menampilkan video inspirasi (thumbnail/tombol play)."""
     video_gen.open_tab("History", "Riwayat")
@@ -40,7 +40,7 @@ def test_07_02_tab_jelajahi(video_gen):
     expect(video_gen.gallery().first).to_be_visible()
 
 
-@tc("E2E-07-03")
+@tc("VID-03")
 def test_07_03_galeri_jelajahi(video_gen):
     """Galeri memuat video; scroll memuat lebih banyak tanpa error."""
     assert video_gen.gallery().count() > 0
@@ -48,7 +48,7 @@ def test_07_03_galeri_jelajahi(video_gen):
     expect(video_gen.gallery().first).to_be_visible()
 
 
-@tc("E2E-07-04", bug=PLAY_BUG)
+@tc("VID-04", bug=PLAY_BUG)
 def test_07_04_putar_video(video_gen):
     """Klik play memutar video yang dipilih."""
     video = video_gen.page.locator("video").first
@@ -56,7 +56,7 @@ def test_07_04_putar_video(video_gen):
     assert video.evaluate("v => !v.paused && v.currentTime > 0 || v.readyState > 2")
 
 
-@tc("E2E-07-05", bug=PLAY_BUG)
+@tc("VID-05", bug=PLAY_BUG)
 def test_07_05_jeda_dan_lanjut(video_gen):
     """Pause menghentikan video, play melanjutkan."""
     video = video_gen.page.locator("video").first
@@ -65,7 +65,7 @@ def test_07_05_jeda_dan_lanjut(video_gen):
     assert video.evaluate("v => v.paused")
 
 
-@tc("E2E-07-06", bug=PLAY_BUG)
+@tc("VID-06", bug=PLAY_BUG)
 def test_07_06_label_durasi(video_gen):
     """Label durasi pada thumbnail sesuai durasi video."""
     label = video_gen.page.get_by_text(rx("^\\d+s$")).first
@@ -75,27 +75,27 @@ def test_07_06_label_durasi(video_gen):
     assert abs(duration - secs) <= 1.5
 
 
-@tc("E2E-07-07")
+@tc("VID-07")
 def test_07_07_input_prompt(video_gen):
     """Prompt tampil utuh."""
     video_gen.write_prompt(PROMPT)
     expect(video_gen.prompt).to_have_value(PROMPT)
 
 
-@tc("E2E-07-08")
+@tc("VID-08")
 def test_07_08_prompt_kosong(video_gen):
     """Tanpa prompt dan tanpa gambar: tombol generate nonaktif."""
     expect(video_gen.generate_button).to_be_disabled()
 
 
-@tc("E2E-07-09")
+@tc("VID-09")
 def test_07_09_prompt_spasi(video_gen):
     """Prompt spasi dianggap kosong."""
     video_gen.write_prompt("     ")
     expect(video_gen.generate_button).to_be_disabled()
 
 
-@tc("E2E-07-10")
+@tc("VID-10")
 def test_07_10_prompt_multiline(video_gen):
     """Prompt multi-baris tersimpan."""
     text = "Video produk kopi susu\nKamera bergerak mendekat"
@@ -103,33 +103,33 @@ def test_07_10_prompt_multiline(video_gen):
     expect(video_gen.prompt).to_have_value(text)
 
 
-@tc("E2E-07-11", tokens=True, skip=NEED_TOKEN)
+@tc("VID-11", tokens=True, skip=NEED_TOKEN)
 def test_07_11_text_to_video(video_gen, funded):
     """Skenario: text to video. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-12")
+@tc("VID-12")
 def test_07_12_upload_referensi(video_gen, files):
     """Gambar referensi valid diterima."""
     video_gen.upload_reference(files["png"])
     expect(video_gen.page.get_by_role("img", name="logo.png")).to_be_visible()
 
 
-@tc("E2E-07-13", tokens=True, skip=NEED_TOKEN, bug="Gambar tidak dipakai sebagai referensi video")
+@tc("VID-13", tokens=True, skip=NEED_TOKEN, bug="Gambar tidak dipakai sebagai referensi video")
 def test_07_13_image_to_video(video_gen, funded):
     """Skenario: image to video. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-14", bug="Tombol submit tidak bisa diklik untuk image-to-video tanpa prompt")
+@tc("VID-14", bug="Tombol submit tidak bisa diklik untuk image-to-video tanpa prompt")
 def test_07_14_image_only(video_gen, files, funded):
     """Hanya gambar (tanpa prompt): generate jalan atau ada validasi jelas."""
     video_gen.upload_reference(files["png"])
     expect(video_gen.generate_button).to_be_enabled()
 
 
-@tc("E2E-07-15")
+@tc("VID-15")
 def test_07_15_referensi_format_tidak_didukung(video_gen, files):
     """PDF ditolak."""
     video_gen.upload_reference(files["pdf"])
@@ -137,14 +137,14 @@ def test_07_15_referensi_format_tidak_didukung(video_gen, files):
     expect(video_gen.page.get_by_text("dokumen.pdf")).to_have_count(0)
 
 
-@tc("E2E-07-16")
+@tc("VID-16")
 def test_07_16_referensi_melebihi_ukuran(video_gen, files):
     """Gambar sangat besar ditolak dengan pesan batas ukuran."""
     video_gen.upload_reference(files["huge"])
     video_gen.expect_text("MB", "size", "ukuran")
 
 
-@tc("E2E-07-17")
+@tc("VID-17")
 def test_07_17_hapus_referensi(video_gen, files):
     """Referensi bisa dihapus."""
     video_gen.upload_reference(files["png"])
@@ -152,7 +152,7 @@ def test_07_17_hapus_referensi(video_gen, files):
     expect(video_gen.page.get_by_role("img", name="logo.png")).to_have_count(0)
 
 
-@tc("E2E-07-18")
+@tc("VID-18")
 def test_07_18_model_seedance(video_gen):
     """Seedance 2.0 adalah model aktif/pilihan."""
     models = video_gen.options("Model")
@@ -161,7 +161,7 @@ def test_07_18_model_seedance(video_gen):
     assert "Seedance 2.0" in video_gen.current("Model")
 
 
-@tc("E2E-07-19")
+@tc("VID-19")
 def test_07_19_ubah_model(video_gen):
     """Mengganti ke model lain mengubah model aktif."""
     models = [m for m in video_gen.options("Model") if m != video_gen.current("Model")]
@@ -172,12 +172,12 @@ def test_07_19_ubah_model(video_gen):
 
 
 @pytest.mark.parametrize("label,preferred", [
-    pytest.param("Aspect ratio", "16:9", marks=pytest.mark.tc("E2E-07-20")),
-    pytest.param("Aspect ratio", None, marks=pytest.mark.tc("E2E-07-21")),
-    pytest.param("Resolution", "720p", marks=pytest.mark.tc("E2E-07-22")),
-    pytest.param("Resolution", None, marks=pytest.mark.tc("E2E-07-23")),
-    pytest.param("Duration", "5s", marks=pytest.mark.tc("E2E-07-24")),
-    pytest.param("Duration", None, marks=pytest.mark.tc("E2E-07-25")),
+    pytest.param("Aspect ratio", "16:9", marks=pytest.mark.tc("VID-20")),
+    pytest.param("Aspect ratio", None, marks=pytest.mark.tc("VID-21")),
+    pytest.param("Resolution", "720p", marks=pytest.mark.tc("VID-22")),
+    pytest.param("Resolution", None, marks=pytest.mark.tc("VID-23")),
+    pytest.param("Duration", "5s", marks=pytest.mark.tc("VID-24")),
+    pytest.param("Duration", None, marks=pytest.mark.tc("VID-25")),
 ])
 def test_07_20_sd_25_konfigurasi(video_gen, label, preferred):
     """Rasio/resolusi/durasi bisa dipilih: nilai preferensi atau opsi lain."""
@@ -194,7 +194,7 @@ def test_07_20_sd_25_konfigurasi(video_gen, label, preferred):
     assert target in video_gen.current(label)
 
 
-@tc("E2E-07-26")
+@tc("VID-26")
 def test_07_26_toggle_audio_nonaktif(video_gen):
     """Toggle Audio bisa dimatikan."""
     audio = video_gen.page.get_by_role("button", name=rx("Audio", exact=True))
@@ -203,74 +203,74 @@ def test_07_26_toggle_audio_nonaktif(video_gen):
     assert audio.get_attribute("aria-pressed") != state or state is None
 
 
-@tc("E2E-07-27", tokens=True, skip=NEED_TOKEN, bug="Audio tidak berfungsi pada video hasil")
+@tc("VID-27", tokens=True, skip=NEED_TOKEN, bug="Audio tidak berfungsi pada video hasil")
 def test_07_27_video_dengan_audio(video_gen, funded):
     """Skenario: video dengan audio. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-28", tokens=True, skip=NEED_TOKEN)
+@tc("VID-28", tokens=True, skip=NEED_TOKEN)
 def test_07_28_status_pemrosesan(video_gen, funded):
     """Skenario: status pemrosesan. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-29", tokens=True, skip=NEED_TOKEN, bug="Hasil tampil ganda sebelum refresh (2 video sama, setelah refresh 1)")
+@tc("VID-29", tokens=True, skip=NEED_TOKEN, bug="Hasil tampil ganda sebelum refresh (2 video sama, setelah refresh 1)")
 def test_07_29_hasil_sesuai_prompt(video_gen, funded):
     """Skenario: hasil sesuai prompt. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-30", tokens=True, skip=NEED_TOKEN)
+@tc("VID-30", tokens=True, skip=NEED_TOKEN)
 def test_07_30_detail_hasil(video_gen, funded):
     """Skenario: detail hasil. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-31")
+@tc("VID-31")
 def test_07_31_tab_riwayat(video_gen):
     """Tab History aktif."""
     video_gen.open_tab("History", "Riwayat")
     video_gen.expect_text("History", "Riwayat")
 
 
-@tc("E2E-07-32", tokens=True, skip=NEED_TOKEN)
+@tc("VID-32", tokens=True, skip=NEED_TOKEN)
 def test_07_32_badge_riwayat(video_gen, funded):
     """Skenario: badge riwayat. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-33", skip="Butuh video pada dua tanggal berbeda")
+@tc("VID-33", skip="Butuh video pada dua tanggal berbeda")
 def test_07_33_pengelompokan_riwayat():
     """Skenario: pengelompokan riwayat. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-34", skip="Butuh video di Riwayat")
+@tc("VID-34", skip="Butuh video di Riwayat")
 def test_07_34_pemutaran_riwayat(video_gen, funded):
     """Skenario: pemutaran riwayat. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-35", tokens=True, skip=NEED_TOKEN)
+@tc("VID-35", tokens=True, skip=NEED_TOKEN)
 def test_07_35_persistensi_riwayat(video_gen, funded):
     """Skenario: persistensi riwayat. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-36", skip="Butuh riwayat di akun utama dan akun kedua (USER_B_*)")
+@tc("VID-36", skip="Butuh riwayat di akun utama dan akun kedua (USER_B_*)")
 def test_07_36_isolasi_riwayat(video_gen, funded, user_b):
     """Skenario: isolasi riwayat. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-37", tokens=True, skip=NEED_TOKEN)
+@tc("VID-37", tokens=True, skip=NEED_TOKEN)
 def test_07_37_penggunaan_token(video_gen, funded):
     """Skenario: penggunaan token. BELUM diotomasi (placeholder); alasannya ada di skip= pada @tc di atas."""
     ...
 
 
-@tc("E2E-07-38", bug="Staging hanya menampilkan sisa token ('N tokens left'), tidak ada estimasi biaya")
+@tc("VID-38", bug="Staging hanya menampilkan sisa token ('N tokens left'), tidak ada estimasi biaya")
 def test_07_38_biaya_berubah_saat_konfigurasi_diubah(video_gen):
     """Estimasi token pada tombol Generate/label diperbarui saat durasi diubah (jika ditampilkan)."""
     label = video_gen.page.get_by_text(rx("tokens left", "token tersisa")).first
@@ -285,7 +285,7 @@ def test_07_38_biaya_berubah_saat_konfigurasi_diubah(video_gen):
     expect(cost.first).to_be_visible()
 
 
-@tc("E2E-07-39", bug="Generate saat saldo 0: tidak ada pesan token tidak cukup dan job masuk antrean")
+@tc("VID-39", bug="Generate saat saldo 0: tidak ada pesan token tidak cukup dan job masuk antrean")
 def test_07_39_saldo_tidak_mencukupi(video_gen, unfunded):
     """Saldo tidak cukup: info saldo tampil, saldo tetap, tidak ada job/hasil kosong."""
     before_balance, before_queue = video_gen.token_balance(), video_gen.queue_count()
@@ -298,7 +298,7 @@ def test_07_39_saldo_tidak_mencukupi(video_gen, unfunded):
     assert video_gen.queue_count() == before_queue, "Generate tanpa saldo tetap memasukkan job ke antrean"
 
 
-@tc("E2E-07-40")
+@tc("VID-40")
 def test_07_40_konsistensi_konfigurasi(video_gen):
     """Beberapa konfigurasi diubah sekaligus tetap tercermin."""
     chosen = {}
@@ -312,7 +312,7 @@ def test_07_40_konsistensi_konfigurasi(video_gen):
         assert value in video_gen.current(label)
 
 
-@tc("E2E-07-41")
+@tc("VID-41")
 def test_07_41_navigasi_antar_tab(video_gen):
     """Pindah Explore <-> History tidak menjalankan generate dan tidak memotong token."""
     before = video_gen.token_balance()

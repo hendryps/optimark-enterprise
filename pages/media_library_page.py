@@ -1,4 +1,4 @@
-"""Page object menu Media Library (/media-library) (E2E-09): folder, upload, kategori, filter, Grid/List."""
+"""Page object menu Media Library (/media-library) (MEDIA): folder, upload, kategori, filter, Grid/List."""
 from playwright.sync_api import expect
 
 from pages.base_page import BasePage, rx

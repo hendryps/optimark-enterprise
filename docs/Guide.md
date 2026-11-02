@@ -12,25 +12,25 @@ persis seperti QA manual, tetapi lebih cepat dan tidak pernah bosan.
 - **Python** = bahasa yang dipakai untuk menulis perintahnya.
 
 Robot ini membuka **staging** (`https://staging.app.optimark.ai`), bukan produksi.
-Setiap test dihubungkan ke baris di Google Sheet lewat ID, misalnya `E2E-03-10`.
+Setiap test dihubungkan ke baris di Google Sheet lewat ID, misalnya `DASH-10`.
 
 ## 2. Peta folder (apa isi tiap folder)
 
 ```
 optimark/
 ├── tests/          <- DAFTAR TUGAS robot. Satu folder per menu aplikasi
-│   ├── auth/             Login & Register        (E2E-01)
-│   ├── onboarding/       Onboarding              (E2E-02)
-│   ├── dashboard/        Dashboard               (E2E-03)
-│   ├── content_composer/ Content Composer        (E2E-04)
-│   ├── ai_assistant/     AI Assistant            (E2E-05)
-│   ├── image_generator/  Image Generator         (E2E-06)
-│   ├── video_generator/  Video Generator         (E2E-07)
-│   ├── seo/              SEO                     (E2E-08, usulan)
-│   ├── media_library/    Media Library           (E2E-09, usulan)
-│   ├── brand_hub/        Brand Hub               (E2E-10, usulan)
-│   ├── campaign/         Campaign                (E2E-11, usulan)
-│   ├── billing/          Billing                 (E2E-12, usulan)
+│   ├── auth/             Login & Register        (AUTH)
+│   ├── onboarding/       Onboarding              (ONB)
+│   ├── dashboard/        Dashboard               (DASH)
+│   ├── content_composer/ Content Composer        (COMP)
+│   ├── ai_assistant/     AI Assistant            (ASST)
+│   ├── image_generator/  Image Generator         (IMG)
+│   ├── video_generator/  Video Generator         (VID)
+│   ├── seo/              SEO                     (SEO, usulan)
+│   ├── media_library/    Media Library           (MEDIA, usulan)
+│   ├── brand_hub/        Brand Hub               (BRAND, usulan)
+│   ├── campaign/         Campaign                (CAMP, usulan)
+│   ├── billing/          Billing                 (BILL, usulan)
 │   └── jira_oda/         Test dari tiket Jira ODA (ID: ODA-218-01 dst.)
 │
 ├── pages/          <- PETA tiap halaman. Di mana tombol/kolom berada. Satu file per halaman
@@ -46,7 +46,7 @@ optimark/
 │
 ├── utils/          <- ALAT BANTU kecil
 │   ├── config.py   baca file .env (URL, email, password, timeout)
-│   └── tc.py       stiker @tc("E2E-xx-xx") untuk menandai test
+│   └── tc.py       stiker @tc("MODUL-NN") untuk menandai test
 │
 ├── docs/           <- dokumentasi (file ini)
 ├── playwright-report/ <- HASIL (index.html + rekaman trace test yang gagal). Dibuat otomatis
@@ -156,7 +156,7 @@ def upload_button(self):
 **Langkah 2: tulis test di `tests/media_library/test_media_library.py`:**
 
 ```python
-@tc("E2E-09-99")                       # ID test case
+@tc("MEDIA-99")                       # ID test case
 def test_09_99_tombol_upload(media_library):   # media_library = halaman sudah terbuka & sudah login
     """Tombol Upload tampil."""        # penjelasan satu kalimat
     expect(media_library.upload_button).to_be_visible()   # periksa: tombol harus tampil

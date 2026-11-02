@@ -1,4 +1,4 @@
-"""Page object Content Composer / Content Planner (/content-composer) (E2E-04)."""
+"""Page object Content Composer / Content Planner (/content-composer) (COMP)."""
 import re
 
 from playwright.sync_api import expect
@@ -13,7 +13,7 @@ STATUS_TABS = [TAB_DRAFT, TAB_SCHEDULED, TAB_PUBLISHED]
 
 
 class ComposerPage(BasePage):
-    """Content Composer / Content Planner: List, Calendar, dan form Create Post (E2E-04)."""
+    """Content Composer / Content Planner: List, Calendar, dan form Create Post (COMP)."""
 
     def open(self) -> "ComposerPage":
         """Buka Content Composer dan tunggu tombol Create Post tampil."""

@@ -1,4 +1,4 @@
-"""Page object halaman Login (/login) dan Register (/register) (E2E-01)."""
+"""Page object halaman Login (/login) dan Register (/register) (AUTH)."""
 import re
 
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
@@ -48,7 +48,7 @@ class AuthPage(BasePage):
         expect(self.page).to_have_url(rx("/dashboard", "/onboarding"), timeout=30000)  # staging kadang lambat
 
     def expect_login_page(self) -> None:
-        """Komponen halaman Login (E2E-01-06)."""
+        """Komponen halaman Login (AUTH-06)."""
         expect(self.page.get_by_role("heading", name=rx("Welcome Back", "Selamat Datang"))).to_be_visible()
         expect(self.google_button).to_be_visible()
         expect(self.page.get_by_role("link", name=rx("Register", "Sign up", "Daftar"))).to_be_visible()
@@ -56,7 +56,7 @@ class AuthPage(BasePage):
         expect(self.page.get_by_role("img", name="Optimark")).to_be_visible()  # logo
 
     def expect_register_page(self) -> None:
-        """Komponen halaman Register (E2E-01-01)."""
+        """Komponen halaman Register (AUTH-01)."""
         expect(self.page.get_by_role("heading", name=rx("Create Account", "Buat Akun"))).to_be_visible()
         expect(self.google_button).to_be_visible()
         expect(self.page.get_by_role("link", name=rx("Sign in", "Login", "Masuk"))).to_be_visible()

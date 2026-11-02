@@ -1,10 +1,10 @@
 """Decorator @tc untuk menautkan test ke ID di Google Sheet dan menandai kondisinya.
 
-    @tc("E2E-03-10")                          # test biasa
-    @tc("E2E-04-24", bug="Field menerima >2200 karakter")   # bug yang sudah tercatat di sheet (Fail)
-    @tc("E2E-01-02", skip="Butuh akun Google baru")         # tidak bisa diotomasi
-    @tc("E2E-06-17", tokens=True)             # memakai token asli
-    @tc("E2E-02-18", destructive=True)        # mengubah/menghabiskan data permanen
+    @tc("DASH-10")                          # test biasa
+    @tc("COMP-24", bug="Field menerima >2200 karakter")   # bug yang sudah tercatat di sheet (Fail)
+    @tc("AUTH-02", skip="Butuh akun Google baru")         # tidak bisa diotomasi
+    @tc("IMG-17", tokens=True)             # memakai token asli
+    @tc("ONB-18", destructive=True)        # mengubah/menghabiskan data permanen
 """
 import pytest
 

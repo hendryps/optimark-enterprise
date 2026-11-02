@@ -1,4 +1,4 @@
-"""Page object Dashboard (/dashboard) (E2E-03): kartu statistik, filter periode, sidebar."""
+"""Page object Dashboard (/dashboard) (DASH): kartu statistik, filter periode, sidebar."""
 from playwright.sync_api import expect
 
 from pages.base_page import BasePage, rx
@@ -28,7 +28,7 @@ SIDEBAR = {
 
 
 class DashboardPage(BasePage):
-    """Dashboard (E2E-03)."""
+    """Dashboard (DASH)."""
 
     def open(self) -> "DashboardPage":
         """Buka Dashboard dan tunggu judul halaman tampil."""

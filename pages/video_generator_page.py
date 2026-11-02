@@ -1,4 +1,4 @@
-"""Page object Video Generator (/video-generator) (E2E-07). Semua logika ada di GeneratorPage."""
+"""Page object Video Generator (/video-generator) (VID). Semua logika ada di GeneratorPage."""
 from playwright.sync_api import Locator
 
 from pages.base_generator_page import GeneratorPage

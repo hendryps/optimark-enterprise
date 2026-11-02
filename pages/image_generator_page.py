@@ -1,4 +1,4 @@
-"""Page object Image Generator (/image-generator) (E2E-06). Semua logika ada di GeneratorPage."""
+"""Page object Image Generator (/image-generator) (IMG). Semua logika ada di GeneratorPage."""
 from playwright.sync_api import Locator
 
 from pages.base_generator_page import GeneratorPage

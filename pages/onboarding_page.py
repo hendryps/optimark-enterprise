@@ -1,11 +1,11 @@
-"""Page object halaman Onboarding (E2E-02): form data brand setelah login pertama."""
+"""Page object halaman Onboarding (ONB): form data brand setelah login pertama."""
 from playwright.sync_api import expect
 
 from pages.base_page import BasePage, rx
 
 
 class OnboardingPage(BasePage):
-    """Halaman onboarding setelah login pertama (E2E-02). Locator berbasis label di sheet.
+    """Halaman onboarding setelah login pertama (ONB). Locator berbasis label di sheet.
 
     Catatan: locator halaman ini belum diverifikasi di staging (butuh akun baru), jadi masih perkiraan.
     """
