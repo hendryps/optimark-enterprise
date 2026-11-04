@@ -1,0 +1,23 @@
+{
+  "name": "optimark-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test otomatis E2E untuk Optimark (Playwright + TypeScript)",
+  "scripts": {
+    "test": "playwright test",
+    "test:headless": "cross-env HEADLESS=true playwright test",
+    "test:tokens": "cross-env INCLUDE=tokens playwright test",
+    "test:destructive": "cross-env INCLUDE=destructive playwright test",
+    "test:all": "cross-env INCLUDE=all playwright test",
+    "test:list": "playwright test --list",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report playwright-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
+    "cross-env": "^10.1.0",
+    "dotenv": "^18.0.9",
+    "typescript": "^7.0.2"
+  }
+}

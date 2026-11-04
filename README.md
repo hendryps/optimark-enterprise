@@ -1,114 +1,127 @@
-# Optimark E2E: Playwright + Python
+# Optimark E2E — Playwright + TypeScript
 
-Automation untuk Google Sheet **"End to End Testing - Test Case Optimark"**, dijalankan di **staging**
-(`https://staging.app.optimark.ai`). Setiap test ditautkan ke ID di sheet lewat `@tc("DASH-10")`.
+Test otomatis untuk aplikasi Optimark, dijalankan di **staging** (`https://staging-app.optimark.ai`).
+Setiap test punya ID unik di judulnya (mis. `DASH-10`, `ASST-02`) supaya mudah dicari dan dicocokkan
+dengan Google Sheet (lihat [docs/test-id-mapping.csv](docs/test-id-mapping.csv) untuk ID lama → baru).
 
-## Setup
+## 1. Setup (sekali saja)
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-playwright install chromium
-copy .env.example .env      # isi USER_EMAIL / USER_PASSWORD (file .env tidak di-commit)
-```
-
-## Menjalankan
+Butuh **Node.js 20 atau lebih baru**.
 
 ```bash
-pytest                                  # run aman (default)
-pytest tests/dashboard                  # satu menu (satu folder)
-pytest -m dashboard                     # per modul: auth onboarding dashboard composer assistant image video seo media_library brand_hub campaign billing
-pytest -k "DASH-10" --co              # cari berdasarkan nama
-pytest -m consumes_tokens               # test yang MEMAKAI TOKEN asli (butuh saldo)
-pytest -m destructive                   # test yang mengubah data permanen (onboarding, post terjadwal)
-HEADLESS=false pytest -k 04_15          # lihat browsernya
+npm install                      # pasang semua paket
+npx playwright install firefox   # pasang browser untuk test (Mozilla Firefox)
+copy .env.example .env           # lalu isi USER_EMAIL / USER_PASSWORD (file .env tidak di-commit)
 ```
 
-Report: folder `playwright-report/`, dibuka dengan `npx playwright show-report` (tambahkan `--port 9324` kalau port 9323 sedang dipakai). Trace test gagal: `npx playwright show-trace playwright-report/traces/<nama-test>.zip`. Default `pytest` **mengecualikan** `consumes_tokens` dan `destructive`.
+## 2. Menjalankan test
 
-## Struktur
+```bash
+npm test                              # run aman (default): tanpa test berat
+npm run test:headless                 # tanpa menampilkan browser
+npm run test:tokens                   # ikut menjalankan test yang MEMAKAI TOKEN asli
+npm run test:destructive              # ikut menjalankan test yang MENYIMPAN/MENGHAPUS data
+npm run test:all                      # semuanya
+npm run test:list                     # hanya daftar test, tidak dijalankan
+npm run report                        # buka laporan HTML (playwright-report/)
+npm run typecheck                     # cek kesalahan penulisan kode TypeScript
 
-| Folder/File | Isi |
+# Memilih test tertentu
+npx playwright test e2e/dashboard                    # satu folder (satu menu)
+npx playwright test e2e/auth/login.spec.ts           # satu file
+npx playwright test -g "DASH-10"                     # satu test berdasarkan ID di judul
+npx playwright test -g "LOGIN-EN"                    # semua test yang judulnya memuat teks itu
+npx playwright test --ui                             # mode UI interaktif (enak untuk debugging)
+```
+
+Test dijalankan **satu per satu** (bukan paralel) karena akun QA dipakai bersama dan server staging
+punya batas percobaan (rate limit). Test yang memakai token atau mengubah data **tidak ikut** run
+default; pakai perintah `test:tokens` / `test:destructive` kalau memang ingin menjalankannya.
+
+## 3. Struktur folder
+
+| Folder / file | Isi |
 |---|---|
-| `tests/<menu>/test_<menu>.py` | Satu folder per menu aplikasi (`auth`, `dashboard`, `media_library`, ...), isinya test |
-| `tests/jira_oda/` | Test dari tiket Jira project **ODA** (kolom QA Testing), ID `ODA-<tiket>-<nn>`. Jalankan: `pytest tests/jira_oda` atau `pytest -m jira` |
-| `pages/` | Page object, satu file per halaman (`dashboard_page.py`, ...) + `base_page.py` dan `base_generator_page.py` (dasar bersama). Semua locator ada di sini |
-| `fixtures/` | Fixture pytest: `browser.py` (browser, login, tab), `page_objects.py` (halaman siap pakai), `account_state.py` (skip sesuai kondisi akun), `sample_files.py` (file upload) |
-| `utils/config.py` | Baca `.env` (URL staging, kredensial, timeout) |
-| `utils/tc.py` | Decorator `@tc(id, skip=, bug=, tokens=, destructive=)` |
-| `conftest.py` | Hanya mendaftarkan isi `fixtures/` ke pytest |
-| `docs/PANDUAN-PEMULA.md` | Panduan untuk QA baru: peta folder, cara menjalankan, cara menulis test |
-| `.claude/agents/` | Agent Claude Code (`qa-page-analyzer`, `qa-test-runner`), opsional, di luar alur pytest |
+| `e2e/<menu>/*.spec.ts` | Test, satu folder per menu (`dashboard`, `auth`, `seo`, ...) |
+| `src/pages/` | **Page object**: semua locator dan langkah per halaman (`dashboard-page.ts`, ...), dasar bersama di `base-page.ts` dan `generator-page.ts` |
+| `src/fixtures/` | **Fixture**: `sessions.ts` (browser + login), `pages.ts` (halaman siap pakai), `account-state.ts` (skip sesuai kondisi akun), `auth.ts` (Mailsac + akun dummy), `index.ts` (pintu masuk) |
+| `src/utils/` | `text.ts` (pencarian teks dua bahasa), `case-info.ts` (`meta()` untuk skip/bug/token), `mailsac.ts`, `new-account.ts`, `sample-files.ts` |
+| `src/config/env.ts` | Membaca `.env` (URL staging, akun QA, timeout) |
+| `playwright.config.ts` | Pengaturan Playwright (browser, timeout, laporan, filter test berat) |
+| `docs/test-id-mapping.csv` | Pemetaan ID lama (Google Sheet) ke ID baru beserta file test-nya |
 
-Baru pertama kali? Baca **[docs/PANDUAN-PEMULA.md](docs/PANDUAN-PEMULA.md)**.
+## 4. Cara membaca dan menulis test
 
-## Menu di luar Google Sheet
+Satu test = satu skenario. Polanya selalu **ARRANGE → ACT → ASSERT**:
 
-Lima menu sidebar ini belum punya test case di sheet, jadi test-nya dibuat dari UI staging dan ID-nya
-**usulan** (bukan dari sheet). Tab `e2e-billing` di sheet masih kosong.
+```ts
+import { expect, test } from '../../src/fixtures';
 
-| Menu | File test | ID |
-|---|---|---|
-| SEO | `test_e2e_seo.py` | SEO-xx |
-| Media Library | `test_e2e_media_library.py` | MEDIA-xx |
-| Brand Hub | `test_e2e_brand_hub.py` | BRAND-xx |
-| Campaign | `test_e2e_campaign.py` | CAMP-xx |
-| Billing | `test_e2e_billing.py` | BILL-xx |
+test('BILL-04 View plans tersedia', async ({ billing }) => {
+  // ARRANGE: fixture `billing` sudah membuka halaman Billing dan sudah login
+  // ACT: (tidak ada aksi tambahan)
+  // ASSERT: tombol View plans harus tampil
+  await expect(billing.viewPlansButton).toBeVisible();
+});
+```
 
-## Arti status di hasil run
+- **ID test** ditulis di awal judul: `'BILL-04 View plans tersedia'`.
+- **Fixture** (`billing`, `dashboard`, `app`, `anon`, `funded`, ...) ditulis di parameter. Playwright
+  menyiapkannya otomatis. Daftar lengkap ada di `src/fixtures/`.
+- **Locator dan langkah panjang** ada di page object (`src/pages/`), jadi test tetap pendek. Kalau
+  tampilan aplikasi berubah, cukup perbaiki di satu tempat.
+- **`expect(...)`** otomatis menunggu sampai kondisi terpenuhi (tidak perlu `sleep`).
 
-- **passed**: sesuai Expected Result di sheet.
-- **skipped**: tidak bisa/tidak aman diotomasi, atau akun QA belum memenuhi syarat. Alasannya tertulis. Contoh: butuh akun Google baru, butuh saldo token, butuh TikTok terhubung.
-- **xfailed**: bug yang sudah tercatat di sheet (status Fail) atau perbedaan staging vs sheet. Alasan di `bug=`.
-- **XPASS**: test yang ditandai bug ternyata lolos, berarti bug sudah diperbaiki, lepaskan `bug=`.
+### Kondisi khusus lewat `meta()`
 
-## Kondisi akun QA saat ini (28 Okt 2026)
+```ts
+import { expect, meta, test } from '../../src/fixtures';
 
-Akun `manto07@mailsac.com`: onboarding selesai, **saldo token 0**, **belum ada platform terhubung**, belum ada konten.
-Karena itu test yang butuh token / TikTok / data konten otomatis di-skip lewat fixture `funded`, `connected`, `with_content`.
-Untuk mengaktifkannya: top-up token dan hubungkan TikTok di akun QA, lalu jalankan ulang.
-Test kebalikannya (`unfunded`, `unconnected`, `no_content`) hanya jalan saat akun memang dalam kondisi itu.
+// Belum bisa diotomasi -> dilewati dengan alasan
+test('AUTH-02 registrasi Google', meta({ skip: 'Butuh akun Google baru' }), async () => {});
 
-## Akun tambahan (opsional, di `.env`)
+// Bug yang sudah diketahui -> DIHARAPKAN gagal. Kalau tiba-tiba lolos, test dianggap gagal
+// sebagai sinyal bug sudah diperbaiki dan `bug` boleh dilepas.
+test('CAMP-10 bahasa status', meta({ bug: 'Label tercampur bahasa' }), async ({ campaign }) => { /* ... */ });
+
+// Memakai token AI asli / mengubah data permanen -> tidak ikut run default
+test('IMG-23 generate', meta({ tokens: true }), async ({ imageGen, funded }) => { /* ... */ });
+test('MEDIA-12 upload', meta({ destructive: true }), async ({ mediaLibrary, files }) => { /* ... */ });
+```
+
+### Fixture kondisi akun
+
+Akun QA bisa berubah (saldo habis, belum ada konten). Tambahkan fixture ini di parameter supaya test
+**otomatis dilewati** kalau syaratnya tidak terpenuhi, bukan gagal dengan pesan membingungkan:
+`funded` / `unfunded` (punya token / tidak), `connected` / `unconnected` (ada platform sosial / tidak),
+`withContent` / `noContent` (ada konten / belum).
+
+## 5. Arti hasil run
+
+- **passed**: sesuai yang diharapkan.
+- **skipped**: tidak bisa/tidak aman diotomasi, atau akun QA belum memenuhi syarat (alasan tertulis di laporan).
+- **expected failure**: test dengan `bug: ...` yang memang gagal (bug sudah tercatat).
+- **failed**: ada yang tidak sesuai. Buka `npm run report` untuk melihat error, screenshot, dan trace.
+
+## 6. Akun di `.env`
 
 | Variabel | Dipakai untuk |
 |---|---|
-| `USER_B_EMAIL/PASSWORD` | Isolasi data antar akun (ASST-21, IMG-30, VID-36) |
-| `NEW_USER_EMAIL/PASSWORD` | Akun BELUM onboarding: seluruh `test_e2e_onboarding` (di-skip tanpa ini) |
-| `VIDEO_FILE` | Path MP4 valid untuk upload video di Composer |
+| `BASE_URL` | Alamat staging |
+| `USER_EMAIL` / `USER_PASSWORD` | Akun QA utama (wajib) |
+| `USER_B_EMAIL/PASSWORD` | Akun kedua, untuk test isolasi data (opsional) |
+| `NEW_USER_EMAIL/PASSWORD` | Akun yang BELUM onboarding, untuk seluruh test onboarding (di-skip tanpa ini) |
+| `GOOGLE_EMAIL/PASSWORD` | Akun Google untuk test "Continue with Google" (di-skip tanpa ini) |
+| `HEADLESS` | `false` = browser tampil (default), `true` = tidak tampil |
+| `SLOW_MO` | Jeda tiap aksi (ms) supaya jalannya test mudah diikuti |
+| `GENERATE_TIMEOUT_MS` | Batas tunggu AI generate |
 
-## Perbedaan staging vs sheet yang ditemukan
+## 7. Catatan penting
 
-- UI staging berbahasa **Inggris**; locator dibuat dua bahasa (Inggris/Indonesia) lewat `rx()`.
-- Dashboard tidak punya kartu **Total Ads** dan tab grafik "Total ads" (hanya Total Content, Scheduled Content).
-- Tombol **Create Ads / Buat Iklan** tidak ada di Content Planner.
-- AI Assistant: kirim pesan lewat tombol Send atau **Ctrl/Cmd+Enter**; Audience dan Budget digabung di satu panel.
-- Image Generator: rasio hanya 1:1, 3:2, 2:3. Tidak ada estimasi biaya token, hanya "N tokens left".
-- Klik **Generate saat saldo 0** memasukkan job ke antrean tanpa pesan "token tidak cukup" (lihat 06-33, 07-39).
-
-## Yang tidak diotomasi (di-skip)
-
-Login/registrasi Google dengan akun nyata (Google memblokir otomasi), drag-and-drop file dari OS,
-menunggu publikasi TikTok nyata, serta test yang butuh minimal data/token/notifikasi di akun QA.
-Tab `Template TC` dan `e2e-billing` di sheet masih kosong, jadi belum ada test-nya.
-
-## Catatan locator
-
-Locator sudah diverifikasi langsung di staging untuk Login, Dashboard, Content Planner (List/Calendar),
-AI Assistant, Image Generator, dan Video Generator (halaman utama). Form **Create Post** dan **onboarding**
-belum bisa diverifikasi (butuh platform terhubung / akun baru), jadi locator-nya masih tebakan dari label di sheet.
-
-## Test auth (login, register, lupa password)
-
-| File | Isi | ID |
-|---|---|---|
-| `tests/auth/test_login.py` | Login email+password dan akun Google (positif + negatif) | `LOGIN-EP/EN/GP/GN-xx` |
-| `tests/auth/test_register.py` | Register, verifikasi email via Mailsac, onboarding sampai Dashboard | `REG-Pxx` / `REG-Nxx` |
-| `tests/auth/test_reset_password.py` | Forgot + reset password via Mailsac | `RST-Pxx` / `RST-Nxx` |
-
-- Akun Google dan password diisi di `.env` (`GOOGLE_EMAIL`, `GOOGLE_PASSWORD`). Browser tampil (`HEADLESS=false`) dengan jeda `SLOW_MO=1000`.
-- Email dummy dibuat otomatis (`utils/mailsac.py`), mis. `dimas.anggara.3110260216@mailsac.com`. Inbox Mailsac **publik**, jangan pakai data asli.
-- **Rate limit staging:** registrasi dibatasi ~15 menit ("Too many attempts"), forgot password ~60 detik per email. Kalau terkena, test di-SKIP (bukan gagal). Jalankan folder `tests/auth` cukup sekali per ~15 menit.
-- Akun yang berhasil sampai Dashboard dicatat di `playwright-report/test-data-registrasi.csv`; test gagal dicatat di `playwright-report/failures.md` (+ screenshot dan trace).
-- Report HTML: buka `playwright-report/index.html` di browser.
+- **Cloudflare di staging**: domain `staging-app.optimark.ai` memblokir browser otomatis di sebagian
+  permintaan (login dan navigasi bisa dibalas 403). Kalau test gagal di langkah login/navigasi dengan
+  halaman "blocked" atau menggantung, minta tim Optimark mengizinkan IP/mesin test.
+- **Mailsac** dipakai untuk membaca email verifikasi dan reset password. Inbox-nya **publik**, jangan
+  pernah memakai data asli di sana.
+- **Akun dummy** untuk test register/reset dibuat otomatis dan disimpan di `auth/new-account.json`
+  (dihapus otomatis di awal setiap run).

@@ -1,8 +1,4 @@
 .env
-.venv/
-__pycache__/
-*.pyc
-.pytest_cache/
 playwright-report/
 node_modules/
 auth/
@@ -11,3 +7,7 @@ auth/
 QA-tests/.qa-catalog/auth.local.json
 QA-tests/.qa-catalog/state/
 .claude/settings.local.json
+
+# TypeScript / Playwright Test
+test-results/
+blob-report/
