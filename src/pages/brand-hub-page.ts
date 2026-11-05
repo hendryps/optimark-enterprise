@@ -5,11 +5,11 @@ import { BasePage } from './base-page';
 
 /** Daftar tab sesuai urutan di layar. */
 export const BRAND_TABS = [
-  'Overview', 'Brand Profile', 'Visual Identity', 'Customer Profiles', 'Guardrails', 'Content Themes', 'Social Links',
+  'Overview', 'Brand Profile', 'Visual Identity', 'Customer Persona', 'Guardrails', 'Content Themes', 'Social Links',
 ];
 
 /** Tab yang di staging masih "being prepared" (belum bisa dipakai). */
-export const COMING_SOON = ['Customer Profiles', 'Guardrails', 'Content Themes', 'Social Links'];
+export const COMING_SOON = ['Guardrails', 'Content Themes', 'Social Links'];
 
 export class BrandHubPage extends BasePage {
   /** Buka Brand Hub dan tunggu tab Overview tampil. */

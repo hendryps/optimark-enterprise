@@ -27,8 +27,8 @@ npm run report                        # buka laporan HTML (playwright-report/)
 npm run typecheck                     # cek kesalahan penulisan kode TypeScript
 
 # Memilih test tertentu
-npx playwright test e2e/dashboard                    # satu folder (satu menu)
-npx playwright test e2e/auth/login.spec.ts           # satu file
+npx playwright test tests/e2e/dashboard                    # satu folder (satu menu)
+npx playwright test tests/e2e/auth/login.spec.ts           # satu file
 npx playwright test -g "DASH-10"                     # satu test berdasarkan ID di judul
 npx playwright test -g "LOGIN"                       # semua test yang judulnya memuat teks itu (satu fitur)
 npx playwright test --ui                             # mode UI interaktif (enak untuk debugging)
@@ -42,7 +42,8 @@ default; pakai perintah `test:tokens` / `test:destructive` kalau memang ingin me
 
 | Folder / file | Isi |
 |---|---|
-| `e2e/<menu>/*.spec.ts` | Test, satu folder per menu (`dashboard`, `auth`, `seo`, ...) |
+| `tests/e2e/<menu>/*.spec.ts` | Test, satu folder per menu (`dashboard`, `auth`, `seo`, ...) |
+| `tests/ui-compare/` | Cek UI/UX: bandingkan staging dengan desain Figma (config sendiri `playwright.ui.config.ts`, jalankan `npm run test:ui`) |
 | `src/pages/` | **Page object**: semua locator dan langkah per halaman (`dashboard-page.ts`, ...), dasar bersama di `base-page.ts` dan `generator-page.ts` |
 | `src/fixtures/` | **Fixture**: `sessions.ts` (browser + login), `pages.ts` (halaman siap pakai), `account-state.ts` (skip sesuai kondisi akun), `auth.ts` (Mailsac + akun dummy), `index.ts` (pintu masuk) |
 | `src/utils/` | `text.ts` (pencarian teks dua bahasa), `case-info.ts` (`meta()` untuk skip/bug/token), `mailsac.ts`, `new-account.ts`, `sample-files.ts` |

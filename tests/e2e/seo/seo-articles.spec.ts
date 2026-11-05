@@ -10,9 +10,9 @@
  * jalankan dengan `npm run test:destructive`). Artikel uji dibuat dengan judul unik dan dihapus lagi
  * lewat fixture `sampleArticle`.
  */
-import { ArticlesPage, CREATE_PATH, LIST_PATH, uniqueTitle } from '../../src/pages/seo-articles-page';
-import { expect, meta, test } from '../../src/fixtures';
-import { rx, rxExact } from '../../src/utils/text';
+import { ArticlesPage, CREATE_PATH, LIST_PATH, uniqueTitle } from '../../../src/pages/seo-articles-page';
+import { expect, meta, test } from '../../../src/fixtures';
+import { rx, rxExact } from '../../../src/utils/text';
 
 const TITLE_REQUIRED = 'Title is required';
 const META_TITLE_REQUIRED = 'Meta title is required';

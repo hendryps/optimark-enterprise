@@ -5,9 +5,9 @@
  * dan ID-nya usulan. Akun QA tanpa paket dan tanpa riwayat pembayaran; test yang butuh kondisi itu
  * di-skip otomatis kalau akunnya sudah berlangganan.
  */
-import { expect, test, meta } from '../../src/fixtures';
-import { BasePage } from '../../src/pages/base-page';
-import { num } from '../../src/utils/text';
+import { expect, test, meta } from '../../../src/fixtures';
+import { BasePage } from '../../../src/pages/base-page';
+import { num } from '../../../src/utils/text';
 
 /** Pilihan filter status pembayaran, urut sesuai tampilan. */
 const STATUSES = ['All statuses', 'Pending', 'Paid', 'Failed', 'Expired'];

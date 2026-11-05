@@ -9,6 +9,8 @@
     "test:tokens": "cross-env INCLUDE=tokens playwright test",
     "test:destructive": "cross-env INCLUDE=destructive playwright test",
     "test:all": "cross-env INCLUDE=all playwright test",
+    "test:ui": "playwright test -c playwright.ui.config.ts",
+    "report:ui": "playwright show-report playwright-report-ui",
     "test:list": "playwright test --list",
     "typecheck": "tsc --noEmit",
     "report": "playwright show-report playwright-report"

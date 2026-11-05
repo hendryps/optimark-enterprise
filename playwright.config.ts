@@ -17,7 +17,7 @@ if (include !== 'tokens' && include !== 'all') excluded.push('@tokens');
 if (include !== 'destructive' && include !== 'all') excluded.push('@destructive');
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests/e2e',
   // Dijalankan sekali di awal run (mis. reset akun dummy).
   globalSetup: './src/config/global-setup.ts',
   // Test dijalankan satu per satu: akun QA dipakai bersama dan server staging punya batas percobaan (rate limit).

@@ -19,9 +19,9 @@
  * - `expect(...)` adalah asersi Playwright: otomatis menunggu sampai kondisi terpenuhi.
  * - `files.png` dkk. adalah file contoh untuk upload (src/utils/sample-files.ts).
  */
-import { MEDIA_CATEGORIES } from '../../src/pages/media-library-page';
-import { expect, test, meta } from '../../src/fixtures';
-import { num } from '../../src/utils/text';
+import { MEDIA_CATEGORIES } from '../../../src/pages/media-library-page';
+import { expect, test, meta } from '../../../src/fixtures';
+import { num } from '../../../src/utils/text';
 
 test.describe('Media Library', () => {
   test('MEDIA-01 akses halaman', async ({ mediaLibrary }) => {

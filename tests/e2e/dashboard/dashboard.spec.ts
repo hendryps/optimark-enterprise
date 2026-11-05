@@ -4,11 +4,11 @@
  * Catatan staging yang diamati 28 Okt 2026: dashboard punya kartu Total Content dan Scheduled
  * Content, TIDAK ada kartu Total Ads; filter periode '1 year / 30 days / 7 days / 24 hours'.
  */
-import { credentials } from '../../src/config/env';
-import { BasePage } from '../../src/pages/base-page';
-import { CARD_ADS, PERIODS, SIDEBAR, type PeriodKey } from '../../src/pages/dashboard-page';
-import { expect, test, meta } from '../../src/fixtures';
-import { num, rx, rxExact } from '../../src/utils/text';
+import { credentials } from '../../../src/config/env';
+import { BasePage } from '../../../src/pages/base-page';
+import { CARD_ADS, PERIODS, SIDEBAR, type PeriodKey } from '../../../src/pages/dashboard-page';
+import { expect, test, meta } from '../../../src/fixtures';
+import { num, rx, rxExact } from '../../../src/utils/text';
 
 const NO_ADS = 'Staging tidak menampilkan kartu Total Ads';
 

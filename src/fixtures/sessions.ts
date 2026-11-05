@@ -17,8 +17,11 @@ import fs from 'node:fs';
 import { AUTH_DIR, authFile, credentials, env, type Role } from '../config/env';
 import { AuthPage } from '../pages/auth-page';
 
-/** Sesi login dianggap masih segar selama 20 menit. */
-const STATE_MAX_AGE_MS = 20 * 60_000;
+/**
+ * Sesi login dianggap masih segar selama 10 menit. Sesi di staging kadang kedaluwarsa sebelum 20 menit,
+ * sehingga run yang panjang tiba-tiba terlempar ke halaman login; 10 menit menjaga sesi tetap valid.
+ */
+const STATE_MAX_AGE_MS = 10 * 60_000;
 
 /** Satu sesi browser: tab + cara menutupnya. */
 export interface Session {

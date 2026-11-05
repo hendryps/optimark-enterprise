@@ -2,13 +2,13 @@
  * Menu Brand Hub (BRAND-01 .. BRAND-22).
  *
  * BELUM ada di Google Sheet; ID ini usulan dan dibuat dari UI staging.
- * Di staging hanya Overview, Brand Profile, dan Visual Identity yang berfungsi; Customer Profiles,
- * Guardrails, Content Themes, dan Social Links masih "being prepared". Test yang menyimpan
+ * Di staging Overview, Brand Profile, Visual Identity, dan Customer Persona sudah berfungsi; Guardrails,
+ * Content Themes, dan Social Links masih "being prepared". Test yang menyimpan
  * perubahan ke akun QA ditandai destructive.
  */
-import { BRAND_TABS, COMING_SOON } from '../../src/pages/brand-hub-page';
-import { expect, test, meta } from '../../src/fixtures';
-import { num, rx } from '../../src/utils/text';
+import { BRAND_TABS, COMING_SOON } from '../../../src/pages/brand-hub-page';
+import { expect, test, meta } from '../../../src/fixtures';
+import { num, rx } from '../../../src/utils/text';
 
 /** Nomor urut dua digit untuk ID test, mis. 3 -> "03". */
 test.describe('Brand Hub', () => {
@@ -34,7 +34,7 @@ test.describe('Brand Hub', () => {
     });
   });
 
-  // BRAND-09 .. BRAND-12: bagian yang belum tersedia.
+  // BRAND-09 .. BRAND-11: bagian yang belum tersedia.
   COMING_SOON.forEach((name, index) => {
     test(`BRAND-${num(9 + index)} bagian belum tersedia: ${name}`, async ({ brandHub }) => {
       // Bagian yang belum jadi menampilkan 'being prepared' dan tombol Back to Overview yang berfungsi.
@@ -43,6 +43,13 @@ test.describe('Brand Hub', () => {
       await brandHub.button('Back to Overview').click();
       await expect(brandHub.tab('Overview')).toHaveAttribute('aria-selected', 'true');
     });
+  });
+
+  test('BRAND-12 bagian Customer Persona tersedia', async ({ brandHub }) => {
+    // Customer Persona sudah jadi: tidak ada pesan 'being prepared' dan ada tombol Fill Manually.
+    await brandHub.openTab('Customer Persona');
+    await expect(brandHub.button('Fill Manually', 'Isi Manual')).toBeVisible();
+    await expect(brandHub.page.getByText('being prepared')).toHaveCount(0);
   });
 
   test('BRAND-13 form brand profile', async ({ brandHub }) => {

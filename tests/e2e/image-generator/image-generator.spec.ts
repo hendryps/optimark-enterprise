@@ -3,11 +3,11 @@
  *
  * Akun QA saldo 0 (tombol Generate nonaktif, label '0 tokens left'), jadi test yang benar-benar
  * menghasilkan gambar memakai fixture `funded` + `tokens: true` dan hanya jalan kalau dipilih sengaja:
- *   npm run test:tokens -- e2e/image-generator
+ *   npm run test:tokens -- tests/e2e/image-generator
  * Test konfigurasi/validasi/UI tidak memakai token.
  */
-import { expect, meta, test } from '../../src/fixtures';
-import { num, rx } from '../../src/utils/text';
+import { expect, meta, test } from '../../../src/fixtures';
+import { num, rx } from '../../../src/utils/text';
 
 const PROMPT = 'Buat poster promosi kopi susu gula aren dengan gaya modern.';
 const NEED_TOKEN = 'Butuh saldo token untuk generate';
@@ -17,32 +17,30 @@ test.describe('Image Generator', () => {
   test('IMG-01 akses halaman', async ({ imageGen }) => {
     // Explore/History, galeri, prompt, referensi, konfigurasi, token, dan tombol generate tampil.
     const { page } = imageGen;
-    await expect(imageGen.tab('Explore', 'Jelajahi')).toBeVisible();
+    await expect(imageGen.tab('Templates', 'Explore', 'Jelajahi')).toBeVisible();
     await expect(imageGen.tab('History', 'Riwayat')).toBeVisible();
     await expect(imageGen.gallery().first()).toBeVisible();
     await expect(imageGen.prompt).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Image', exact: true })).toBeVisible();
-    for (const label of ['Model', 'Aspect ratio', 'Quality', 'Style', 'Number of images']) {
+    await expect(page.getByRole('button', { name: 'Upload image', exact: true })).toBeVisible();
+    for (const label of ['Model', 'Orientation', 'Quality', 'Style', 'Number of images']) {
       await expect(imageGen.optionButton(label)).toBeVisible();
     }
-    await expect(page.getByText(rx('tokens left', 'token tersisa', 'sisa token'))).toBeVisible();
+    await expect(page.getByRole('button', { name: rx('Remaining balance', 'Saldo') }).first()).toBeVisible(); // panel saldo token
     await expect(imageGen.generateButton).toBeVisible();
   });
 
   test('IMG-02 tab jelajahi', async ({ imageGen }) => {
     // Tab Explore aktif dan menampilkan galeri inspirasi.
     await imageGen.openTab('History', 'Riwayat');
-    await imageGen.openTab('Explore', 'Jelajahi');
+    await imageGen.openTab('Templates', 'Explore', 'Jelajahi');
     await expect(imageGen.gallery().first()).toBeVisible();
   });
 
   test('IMG-03 galeri jelajahi', async ({ imageGen }) => {
-    // Galeri memuat banyak gambar tanpa duplikat judul.
-    const titles = await imageGen.gallery().locator('p').allInnerTexts();
-    expect(titles.length).toBeGreaterThanOrEqual(6);
-    expect(new Set(titles).size, 'Ada gambar inspirasi duplikat').toBe(titles.length);
-    await imageGen.page.mouse.wheel(0, 2000);
+    // Galeri template memuat banyak kartu dan tombol Load more.
     await expect(imageGen.gallery().first()).toBeVisible();
+    expect(await imageGen.gallery().count()).toBeGreaterThanOrEqual(6);
+    await expect(imageGen.button('Load more', 'Muat lebih banyak')).toBeVisible();
   });
 
   test('IMG-04 pilih inspirasi', meta({ bug: INSPIRATION_BUG }), async ({ imageGen }) => {
@@ -91,7 +89,7 @@ test.describe('Image Generator', () => {
 
   // IMG-11 .. IMG-13: pilihan rasio, kualitas, dan style bisa diubah.
   const configCases: [string, string | null][] = [
-    ['Aspect ratio', '3:2'],
+    ['Orientation', '3:2'],
     ['Quality', 'High'],
     ['Style', null],
   ];
@@ -129,9 +127,8 @@ test.describe('Image Generator', () => {
   });
 
   test('IMG-17 jumlah output 4', async ({ imageGen }) => {
-    // Number of images default 4 dan bisa dipilih.
-    expect((await imageGen.current('Number of images')).endsWith('4')).toBe(true);
-    await imageGen.choose('Number of images', '1');
+    // Number of images default 1 dan bisa diubah menjadi 4.
+    expect((await imageGen.current('Number of images')).endsWith('1')).toBe(true);
     await imageGen.choose('Number of images', '4');
     expect((await imageGen.current('Number of images')).endsWith('4')).toBe(true);
   });
@@ -139,7 +136,7 @@ test.describe('Image Generator', () => {
   test('IMG-18 upload referensi', async ({ imageGen, files }) => {
     // Gambar referensi valid diterima (thumbnail/nama tampil).
     await imageGen.uploadReference(files.png);
-    await expect(imageGen.page.getByRole('img', { name: 'Reference' })).toBeVisible();
+    await expect(imageGen.page.getByRole('img', { name: 'logo.png' })).toBeVisible();
   });
 
   test('IMG-19 generate dengan referensi', meta({ tokens: true, skip: NEED_TOKEN }), async () => {});
@@ -160,8 +157,9 @@ test.describe('Image Generator', () => {
   test('IMG-22 hapus referensi', async ({ imageGen, files }) => {
     // Referensi bisa dihapus dari form.
     await imageGen.uploadReference(files.png);
-    await imageGen.page.getByRole('button', { name: rx('Remove reference', 'Hapus referensi') }).click();
-    await expect(imageGen.page.getByRole('img', { name: 'Reference' })).toHaveCount(0);
+    await imageGen.page.getByRole('img', { name: 'logo.png' }).hover(); // tombol hapus baru muncul saat thumbnail di-hover
+    await imageGen.page.getByRole('button', { name: rx('Remove image', 'Remove', 'Hapus') }).click();
+    await expect(imageGen.page.getByRole('img', { name: 'logo.png' })).toHaveCount(0);
   });
 
   test('IMG-23 proses generate', meta({ tokens: true, skip: NEED_TOKEN }), async () => {});
@@ -204,10 +202,10 @@ test.describe('Image Generator', () => {
 
   test('IMG-34 konsistensi konfigurasi', async ({ imageGen }) => {
     // Beberapa konfigurasi diubah sekaligus tetap tercermin pada tombolnya.
-    await imageGen.choose('Aspect ratio', '3:2');
+    await imageGen.choose('Orientation', '3:2');
     await imageGen.choose('Number of images', '1');
     await imageGen.choose('Quality', 'High');
-    expect(await imageGen.current('Aspect ratio')).toContain('3:2');
+    expect(await imageGen.current('Orientation')).toContain('3:2');
     expect((await imageGen.current('Number of images')).endsWith('1')).toBe(true);
     expect(await imageGen.current('Quality')).toContain('High');
   });
@@ -217,7 +215,7 @@ test.describe('Image Generator', () => {
     const before = await imageGen.tokenBalance();
     await imageGen.writePrompt(PROMPT);
     await imageGen.openTab('History', 'Riwayat');
-    await imageGen.openTab('Explore', 'Jelajahi');
+    await imageGen.openTab('Templates', 'Explore', 'Jelajahi');
     expect(await imageGen.tokenBalance()).toBe(before);
     await expect(imageGen.prompt).toBeVisible();
   });

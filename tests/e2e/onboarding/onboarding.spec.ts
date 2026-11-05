@@ -5,8 +5,8 @@
  * jadi otomatis di-skip kalau akun itu belum disiapkan. Test yang menyelesaikan onboarding
  * (ONB-17, ONB-18) bersifat destructive karena akun hanya bisa onboarding sekali.
  */
-import { expect, meta, test } from '../../src/fixtures';
-import { rx } from '../../src/utils/text';
+import { expect, meta, test } from '../../../src/fixtures';
+import { rx } from '../../../src/utils/text';
 
 /** Teks 501 karakter untuk menguji batas 500 karakter. */
 const LONG_TEXT = 'a'.repeat(501);

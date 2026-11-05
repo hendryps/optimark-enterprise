@@ -1,5 +1,7 @@
 .env
 playwright-report/
+playwright-report-ui/
+test-results-ui/
 node_modules/
 auth/
 .playwright-mcp/

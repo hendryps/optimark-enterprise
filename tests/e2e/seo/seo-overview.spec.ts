@@ -5,11 +5,10 @@
  * Halaman Growth Intel · SEO punya 9 tab. Analisis nyata (tombol Analyze) memakai kuota/token,
  * jadi hanya dicek kesiapan input-nya: tombol Analyze yang AKTIF tidak pernah diklik di sini.
  */
-import { SEO_TABS } from '../../src/pages/seo-page';
-import { expect, meta, test } from '../../src/fixtures';
-import { num, rx } from '../../src/utils/text';
+import { SEO_TABS } from '../../../src/pages/seo-page';
+import { expect, meta, test } from '../../../src/fixtures';
+import { num, rx } from '../../../src/utils/text';
 
-const SITE_AUDIT_BUG = "Membuka tab Site Audit menampilkan 'Application error: a client-side exception has occurred'";
 const BUG_URL_INVALID = "Staging: URL tidak valid ('bukan-url') tetap mengaktifkan tombol Analyze, tanpa validasi format";
 
 /** Nomor urut dua digit untuk ID test, mis. 3 -> "03". */
@@ -26,8 +25,7 @@ test.describe('SEO Overview', () => {
 
   // SEO-03 .. SEO-10: setiap tab (selain Overview) bisa dibuka.
   SEO_TABS.slice(1).forEach((name, index) => {
-    const details = name === 'Site Audit' ? meta({ bug: SITE_AUDIT_BUG }) : meta();
-    test(`SEO-${num(3 + index)} buka tab ${name}`, details, async ({ seo }) => {
+    test(`SEO-${num(3 + index)} buka tab ${name}`, async ({ seo }) => {
       // Setiap tab bisa dibuka dan menjadi aktif; tab lain tidak aktif.
       await seo.tab(name).click();
       await expect(seo.tab(name)).toHaveAttribute('aria-selected', 'true');

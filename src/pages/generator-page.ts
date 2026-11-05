@@ -6,8 +6,8 @@ import { BasePage } from './base-page';
 /**
  * Dasar Image Generator dan Video Generator.
  *
- * Di staging, 'Explore' dan 'History' berupa button (bukan tab), dan semua konfigurasi
- * berupa button ber-aria-label (Model, Aspect ratio, ...) yang membuka pilihan.
+ * Di staging, 'Templates' dan 'History' berupa tab, dan semua konfigurasi
+ * berupa button ber-aria-label (Model, Orientation, ...) yang membuka pilihan.
  * Subclass mengisi PATH, PROMPT_HINT, dan GENERATE_NAME.
  */
 export abstract class GeneratorPage extends BasePage {
@@ -25,9 +25,10 @@ export abstract class GeneratorPage extends BasePage {
   }
 
   // ---------------------------------------------------------------- tab
-  /** Tombol tab 'Explore' / 'History' (di staging berupa button, bukan role=tab). */
+  /** Tab 'Templates' / 'History' (role=tab; tetap menerima button untuk jaga-jaga). */
   tab(...names: string[]): Locator {
-    return this.page.getByRole('main').getByRole('button', { name: rxExact(...names) }).first();
+    const main = this.page.getByRole('main');
+    return main.getByRole('tab', { name: rxExact(...names) }).or(main.getByRole('button', { name: rxExact(...names) })).first();
   }
 
   /** Klik tab dengan nama tertentu. */
@@ -52,7 +53,7 @@ export abstract class GeneratorPage extends BasePage {
   }
 
   // ---------------------------------------------------------------- konfigurasi
-  /** Button konfigurasi (Model, Aspect ratio, Quality, Style, Number of images, Resolution, Duration). */
+  /** Button konfigurasi (Model, Orientation, Quality, Style, Number of images, Resolution, Duration). */
   optionButton(label: string): Locator {
     return this.page.getByRole('button', { name: rxExact(label) });
   }
@@ -74,7 +75,8 @@ export abstract class GeneratorPage extends BasePage {
     // popup berada satu pembungkus dengan tombolnya
     const text = await this.optionButton(label).locator('xpath=..').innerText();
     await this.setOpen(label, false);
-    return text.split('\n').map((t) => t.trim()).filter(Boolean);
+    // Baris pertama popup adalah judulnya sendiri (mis. 'Style'); bukan pilihan, jadi dibuang.
+    return text.split('\n').map((t) => t.trim()).filter((t) => t && t !== label);
   }
 
   /**

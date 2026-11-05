@@ -3,10 +3,10 @@
  *
  * Sama seperti Image Generator: akun QA saldo 0 sehingga test yang menghasilkan video memakai
  * fixture `funded` + `tokens: true` (jalankan sengaja dengan `npm run test:tokens`). Konfigurasi video
- * di staging: Model (Seedance 2.0), Aspect ratio, Resolution, Duration, dan toggle Audio.
+ * di staging: Model (Seedance 2.0), Orientation, Resolution, Duration, dan toggle Audio.
  */
-import { expect, meta, test } from '../../src/fixtures';
-import { num, rx, rxExact } from '../../src/utils/text';
+import { expect, meta, test } from '../../../src/fixtures';
+import { num, rx, rxExact } from '../../../src/utils/text';
 
 const PROMPT = 'Video sinematik kopi susu dituangkan ke dalam gelas dengan gerakan lambat.';
 const NEED_TOKEN = 'Butuh saldo token untuk generate video';
@@ -16,27 +16,28 @@ test.describe('Video Generator', () => {
   test('VID-01 akses halaman', async ({ videoGen }) => {
     // Explore/History, galeri, prompt, upload gambar, konfigurasi, audio, token, dan Generate tampil.
     const { page } = videoGen;
-    await expect(videoGen.tab('Explore', 'Jelajahi')).toBeVisible();
+    await expect(videoGen.tab('Templates', 'Explore', 'Jelajahi')).toBeVisible();
     await expect(videoGen.tab('History', 'Riwayat')).toBeVisible();
     await expect(videoGen.prompt).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Image', exact: true })).toBeVisible();
-    for (const label of ['Model', 'Aspect ratio', 'Resolution', 'Duration']) {
+    await expect(page.getByRole('button', { name: 'Upload image', exact: true })).toBeVisible();
+    for (const label of ['Model', 'Orientation', 'Resolution', 'Duration']) {
       await expect(videoGen.optionButton(label)).toBeVisible();
     }
     await expect(page.getByRole('button', { name: rxExact('Audio') })).toBeVisible();
-    await expect(page.getByText(rx('tokens left', 'token tersisa'))).toBeVisible();
+    await expect(page.getByRole('button', { name: rx('Remaining balance', 'Saldo') }).first()).toBeVisible(); // panel saldo token
     await expect(videoGen.generateButton).toBeVisible();
   });
 
   test('VID-02 tab jelajahi', async ({ videoGen }) => {
     // Explore aktif dan menampilkan video inspirasi (thumbnail/tombol play).
     await videoGen.openTab('History', 'Riwayat');
-    await videoGen.openTab('Explore', 'Jelajahi');
+    await videoGen.openTab('Templates', 'Explore', 'Jelajahi');
     await expect(videoGen.gallery().first()).toBeVisible();
   });
 
   test('VID-03 galeri jelajahi', async ({ videoGen }) => {
     // Galeri memuat video; scroll memuat lebih banyak tanpa error.
+    await expect(videoGen.gallery().first()).toBeVisible(); // tunggu galeri selesai dimuat
     expect(await videoGen.gallery().count()).toBeGreaterThan(0);
     await videoGen.page.mouse.wheel(0, 2000);
     await expect(videoGen.gallery().first()).toBeVisible();
@@ -122,7 +123,9 @@ test.describe('Video Generator', () => {
     await expect(videoGen.page.getByText('dokumen.pdf')).toHaveCount(0);
   });
 
-  test('VID-16 referensi melebihi ukuran', async ({ videoGen, files }) => {
+  test('VID-16 referensi melebihi ukuran', meta({
+    bug: 'Gambar referensi 30 MB diterima tanpa pesan batas ukuran (Image Generator menolak > 10 MB)',
+  }), async ({ videoGen, files }) => {
     // Gambar sangat besar ditolak dengan pesan batas ukuran.
     await videoGen.uploadReference(files.huge);
     await videoGen.expectText('MB', 'size', 'ukuran');
@@ -131,7 +134,8 @@ test.describe('Video Generator', () => {
   test('VID-17 hapus referensi', async ({ videoGen, files }) => {
     // Referensi bisa dihapus.
     await videoGen.uploadReference(files.png);
-    await videoGen.page.getByRole('button', { name: rx('Remove all', 'Hapus semua') }).click();
+    await videoGen.page.getByRole('img', { name: 'logo.png' }).hover(); // tombol hapus baru muncul saat thumbnail di-hover
+    await videoGen.page.getByRole('button', { name: rx('Remove', 'Hapus') }).click();
     await expect(videoGen.page.getByRole('img', { name: 'logo.png' })).toHaveCount(0);
   });
 
@@ -154,8 +158,8 @@ test.describe('Video Generator', () => {
 
   // VID-20 .. VID-25: rasio, resolusi, dan durasi (nilai pilihan atau opsi lain).
   const configCases: [string, string | null][] = [
-    ['Aspect ratio', '16:9'],
-    ['Aspect ratio', null],
+    ['Orientation', '16:9'],
+    ['Orientation', null],
     ['Resolution', '720p'],
     ['Resolution', null],
     ['Duration', '5s'],
@@ -250,7 +254,7 @@ test.describe('Video Generator', () => {
   test('VID-40 konsistensi konfigurasi', async ({ videoGen }) => {
     // Beberapa konfigurasi diubah sekaligus tetap tercermin.
     const chosen: Record<string, string> = {};
-    for (const label of ['Aspect ratio', 'Resolution', 'Duration']) {
+    for (const label of ['Orientation', 'Resolution', 'Duration']) {
       const current = await videoGen.current(label);
       const others = (await videoGen.options(label)).filter((o) => o !== current);
       if (others.length) {
@@ -269,7 +273,7 @@ test.describe('Video Generator', () => {
     const before = await videoGen.tokenBalance();
     await videoGen.writePrompt(PROMPT);
     await videoGen.openTab('History', 'Riwayat');
-    await videoGen.openTab('Explore', 'Jelajahi');
+    await videoGen.openTab('Templates', 'Explore', 'Jelajahi');
     expect(await videoGen.tokenBalance()).toBe(before);
     await expect(videoGen.prompt).toBeVisible();
   });

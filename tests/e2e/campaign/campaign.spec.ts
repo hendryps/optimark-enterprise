@@ -4,8 +4,8 @@
  * BELUM ada di Google Sheet; ID ini usulan dan dibuat dari UI staging.
  * Membuat campaign valid butuh date picker dan meninggalkan data permanen, jadi ditandai destructive.
  */
-import { expect, test, meta } from '../../src/fixtures';
-import { BasePage } from '../../src/pages/base-page';
+import { expect, test, meta } from '../../../src/fixtures';
+import { BasePage } from '../../../src/pages/base-page';
 
 test.describe('Campaign', () => {
   test('CAMP-01 akses halaman', async ({ campaign }) => {

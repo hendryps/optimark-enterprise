@@ -1,264 +1,264 @@
 ﻿ID lama (Google Sheet),ID baru,Modul,File test (TypeScript)
-E2E-01-01,AUTH-01,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-02,AUTH-02,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-03,AUTH-03,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-04,AUTH-04,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-05,AUTH-05,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-06,AUTH-06,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-07,AUTH-07,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-08,AUTH-08,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-09,AUTH-09,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-10,AUTH-10,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-11,AUTH-11,Login & Register,e2e/auth/login-register.spec.ts
-E2E-01-12,AUTH-12,Login & Register,e2e/auth/login-register.spec.ts
-E2E-02-01,ONB-01,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-02,ONB-02,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-03,ONB-03,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-04,ONB-04,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-05,ONB-05,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-06,ONB-06,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-07,ONB-07,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-08,ONB-08,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-09,ONB-09,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-10,ONB-10,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-11,ONB-11,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-12,ONB-12,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-13,ONB-13,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-14,ONB-14,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-15,ONB-15,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-16,ONB-16,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-17,ONB-17,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-18,ONB-18,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-02-19,ONB-19,Onboarding,e2e/onboarding/onboarding.spec.ts
-E2E-03-01,DASH-01,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-02,DASH-02,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-03,DASH-03,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-04,DASH-04,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-05,DASH-05,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-06,DASH-06,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-07,DASH-07,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-08,DASH-08,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-09,DASH-09,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-10,DASH-10,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-11,DASH-11,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-12,DASH-12,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-13,DASH-13,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-14,DASH-14,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-15,DASH-15,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-16,DASH-16,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-17,DASH-17,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-18,DASH-26,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-19,DASH-27,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-20,DASH-28,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-21,DASH-30,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-22,DASH-31,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-23,DASH-32,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-24,DASH-33,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-03-25,DASH-34,Dashboard,e2e/dashboard/dashboard.spec.ts
-E2E-04-01,COMP-01,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-02,COMP-02,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-03,COMP-03,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-04,COMP-04,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-05,COMP-05,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-06,COMP-06,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-07,COMP-07,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-08,COMP-08,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-09,COMP-09,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-10,COMP-10,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-11,COMP-11,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-12,COMP-12,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-13,COMP-13,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-14,COMP-14,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-15,COMP-15,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-16,COMP-16,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-17,COMP-17,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-18,COMP-18,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-19,COMP-19,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-20,COMP-20,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-21,COMP-21,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-22,COMP-22,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-23,COMP-23,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-24,COMP-24,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-25,COMP-25,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-26,COMP-26,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-27,COMP-27,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-28,COMP-28,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-29,COMP-29,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-30,COMP-30,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-31,COMP-31,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-32,COMP-32,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-33,COMP-33,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-34,COMP-34,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-35,COMP-35,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-36,COMP-36,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-37,COMP-37,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-38,COMP-38,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-39,COMP-39,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-40,COMP-40,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-41,COMP-41,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-04-42,COMP-42,Content Composer,e2e/content-composer/content-composer.spec.ts
-E2E-05-01,ASST-01,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-02,ASST-02,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-03,ASST-03,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-04,ASST-04,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-05,ASST-05,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-06,ASST-06,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-07,ASST-07,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-08,ASST-08,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-09,ASST-09,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-10,ASST-10,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-11,ASST-11,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-12,ASST-12,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-13,ASST-13,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-14,ASST-14,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-15,ASST-15,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-16,ASST-16,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-17,ASST-17,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-18,ASST-18,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-19,ASST-19,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-20,ASST-20,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-21,ASST-21,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-22,ASST-22,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-23,ASST-23,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-24,ASST-24,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-25,ASST-25,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-26,ASST-26,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-05-27,ASST-27,AI Assistant,e2e/ai-assistant/ai-assistant.spec.ts
-E2E-06-01,IMG-01,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-02,IMG-02,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-03,IMG-03,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-04,IMG-04,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-05,IMG-05,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-06,IMG-06,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-07,IMG-07,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-08,IMG-08,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-09,IMG-09,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-10,IMG-10,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-11,IMG-11,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-12,IMG-14,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-13,IMG-13,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-14,IMG-15,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-15,IMG-15,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-16,IMG-16,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-17,IMG-17,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-18,IMG-18,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-19,IMG-19,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-20,IMG-20,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-21,IMG-21,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-22,IMG-22,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-23,IMG-23,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-24,IMG-24,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-25,IMG-25,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-26,IMG-26,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-27,IMG-27,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-28,IMG-28,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-29,IMG-29,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-30,IMG-30,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-31,IMG-31,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-32,IMG-32,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-33,IMG-33,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-34,IMG-34,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-06-35,IMG-35,Image Generator,e2e/image-generator/image-generator.spec.ts
-E2E-07-01,VID-01,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-02,VID-02,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-03,VID-03,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-04,VID-04,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-05,VID-05,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-06,VID-06,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-07,VID-07,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-08,VID-08,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-09,VID-09,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-10,VID-10,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-11,VID-11,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-12,VID-12,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-13,VID-13,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-14,VID-14,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-15,VID-15,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-16,VID-16,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-17,VID-17,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-18,VID-18,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-19,VID-19,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-20,VID-20,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-21,VID-21,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-22,VID-22,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-23,VID-23,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-24,VID-24,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-25,VID-25,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-26,VID-26,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-27,VID-27,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-28,VID-28,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-29,VID-29,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-30,VID-30,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-31,VID-31,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-32,VID-32,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-33,VID-33,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-34,VID-34,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-35,VID-35,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-36,VID-36,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-37,VID-37,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-38,VID-38,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-39,VID-39,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-40,VID-40,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-07-41,VID-41,Video Generator,e2e/video-generator/video-generator.spec.ts
-E2E-08-(otomatis),SEO-(otomatis),SEO,"e2e/seo/seo-articles.spec.ts, e2e/seo/seo-overview.spec.ts"
-E2E-08-01,SEO-01,SEO,e2e/seo/seo-overview.spec.ts
-E2E-08-02,SEO-02,SEO,e2e/seo/seo-overview.spec.ts
-E2E-08-11,SEO-11,SEO,e2e/seo/seo-overview.spec.ts
-E2E-08-12,SEO-12,SEO,e2e/seo/seo-overview.spec.ts
-E2E-08-13,SEO-13,SEO,e2e/seo/seo-overview.spec.ts
-E2E-08-14,SEO-14,SEO,e2e/seo/seo-overview.spec.ts
-E2E-09-(otomatis),MEDIA-(otomatis),Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-01,MEDIA-01,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-01,MEDIA-01,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-02,MEDIA-02,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-06,MEDIA-06,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-07,MEDIA-07,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-08,MEDIA-08,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-09,MEDIA-09,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-10,MEDIA-10,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-11,MEDIA-11,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-12,MEDIA-12,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-13,MEDIA-13,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-14,MEDIA-14,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-15,MEDIA-15,Media Library,e2e/media-library/media-library.spec.ts
-E2E-09-16,MEDIA-16,Media Library,e2e/media-library/media-library.spec.ts
-E2E-10-(otomatis),BRAND-(otomatis),Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-01,BRAND-01,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-02,BRAND-02,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-13,BRAND-13,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-14,BRAND-14,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-15,BRAND-15,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-16,BRAND-16,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-17,BRAND-17,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-18,BRAND-18,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-19,BRAND-19,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-20,BRAND-20,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-21,BRAND-21,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-10-22,BRAND-22,Brand Hub,e2e/brand-hub/brand-hub.spec.ts
-E2E-11-01,CAMP-01,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-02,CAMP-02,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-03,CAMP-03,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-04,CAMP-04,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-05,CAMP-05,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-06,CAMP-06,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-07,CAMP-07,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-08,CAMP-08,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-09,CAMP-09,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-10,CAMP-10,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-11,CAMP-11,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-12,CAMP-12,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-13,CAMP-13,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-14,CAMP-14,Campaign,e2e/campaign/campaign.spec.ts
-E2E-11-15,CAMP-15,Campaign,e2e/campaign/campaign.spec.ts
-E2E-12-01,BILL-01,Billing,e2e/billing/billing.spec.ts
-E2E-12-02,BILL-02,Billing,e2e/billing/billing.spec.ts
-E2E-12-03,BILL-03,Billing,e2e/billing/billing.spec.ts
-E2E-12-04,BILL-04,Billing,e2e/billing/billing.spec.ts
-E2E-12-05,BILL-05,Billing,e2e/billing/billing.spec.ts
-E2E-12-06,BILL-06,Billing,e2e/billing/billing.spec.ts
-E2E-12-07,BILL-07,Billing,e2e/billing/billing.spec.ts
-E2E-12-08,BILL-08,Billing,e2e/billing/billing.spec.ts
-E2E-12-09,BILL-12,Billing,e2e/billing/billing.spec.ts
-E2E-12-10,BILL-13,Billing,e2e/billing/billing.spec.ts
-E2E-12-11,BILL-14,Billing,e2e/billing/billing.spec.ts
-E2E-12-12,BILL-15,Billing,e2e/billing/billing.spec.ts
+E2E-01-01,AUTH-01,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-02,AUTH-02,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-03,AUTH-03,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-04,AUTH-04,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-05,AUTH-05,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-06,AUTH-06,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-07,AUTH-07,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-08,AUTH-08,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-09,AUTH-09,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-10,AUTH-10,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-11,AUTH-11,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-01-12,AUTH-12,Login & Register,tests/e2e/auth/ (ID dipecah menjadi LOGIN-xx / REG-xx / RST-xx; pemetaan per ID belum disusun)
+E2E-02-01,ONB-01,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-02,ONB-02,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-03,ONB-03,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-04,ONB-04,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-05,ONB-05,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-06,ONB-06,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-07,ONB-07,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-08,ONB-08,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-09,ONB-09,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-10,ONB-10,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-11,ONB-11,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-12,ONB-12,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-13,ONB-13,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-14,ONB-14,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-15,ONB-15,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-16,ONB-16,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-17,ONB-17,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-18,ONB-18,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-02-19,ONB-19,Onboarding,tests/e2e/onboarding/onboarding.spec.ts
+E2E-03-01,DASH-01,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-02,DASH-02,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-03,DASH-03,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-04,DASH-04,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-05,DASH-05,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-06,DASH-06,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-07,DASH-07,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-08,DASH-08,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-09,DASH-09,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-10,DASH-10,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-11,DASH-11,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-12,DASH-12,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-13,DASH-13,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-14,DASH-14,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-15,DASH-15,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-16,DASH-16,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-17,DASH-17,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-18,DASH-26,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-19,DASH-27,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-20,DASH-28,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-21,DASH-30,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-22,DASH-31,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-23,DASH-32,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-24,DASH-33,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-03-25,DASH-34,Dashboard,tests/e2e/dashboard/dashboard.spec.ts
+E2E-04-01,COMP-01,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-02,COMP-02,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-03,COMP-03,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-04,COMP-04,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-05,COMP-05,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-06,COMP-06,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-07,COMP-07,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-08,COMP-08,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-09,COMP-09,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-10,COMP-10,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-11,COMP-11,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-12,COMP-12,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-13,COMP-13,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-14,COMP-14,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-15,COMP-15,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-16,COMP-16,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-17,COMP-17,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-18,COMP-18,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-19,COMP-19,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-20,COMP-20,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-21,COMP-21,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-22,COMP-22,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-23,COMP-23,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-24,COMP-24,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-25,COMP-25,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-26,COMP-26,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-27,COMP-27,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-28,COMP-28,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-29,COMP-29,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-30,COMP-30,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-31,COMP-31,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-32,COMP-32,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-33,COMP-33,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-34,COMP-34,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-35,COMP-35,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-36,COMP-36,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-37,COMP-37,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-38,COMP-38,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-39,COMP-39,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-40,COMP-40,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-41,COMP-41,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-04-42,COMP-42,Content Composer,tests/e2e/content-composer/content-composer.spec.ts
+E2E-05-01,ASST-01,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-02,ASST-02,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-03,ASST-03,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-04,ASST-04,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-05,ASST-05,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-06,ASST-06,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-07,ASST-07,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-08,ASST-08,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-09,ASST-09,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-10,ASST-10,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-11,ASST-11,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-12,ASST-12,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-13,ASST-13,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-14,ASST-14,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-15,ASST-15,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-16,ASST-16,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-17,ASST-17,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-18,ASST-18,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-19,ASST-19,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-20,ASST-20,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-21,ASST-21,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-22,ASST-22,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-23,ASST-23,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-24,ASST-24,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-25,ASST-25,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-26,ASST-26,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-05-27,ASST-27,AI Assistant,tests/e2e/ai-assistant/ai-assistant.spec.ts
+E2E-06-01,IMG-01,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-02,IMG-02,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-03,IMG-03,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-04,IMG-04,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-05,IMG-05,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-06,IMG-06,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-07,IMG-07,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-08,IMG-08,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-09,IMG-09,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-10,IMG-10,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-11,IMG-11,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-12,IMG-14,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-13,IMG-13,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-14,IMG-15,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-15,IMG-15,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-16,IMG-16,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-17,IMG-17,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-18,IMG-18,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-19,IMG-19,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-20,IMG-20,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-21,IMG-21,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-22,IMG-22,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-23,IMG-23,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-24,IMG-24,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-25,IMG-25,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-26,IMG-26,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-27,IMG-27,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-28,IMG-28,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-29,IMG-29,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-30,IMG-30,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-31,IMG-31,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-32,IMG-32,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-33,IMG-33,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-34,IMG-34,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-06-35,IMG-35,Image Generator,tests/e2e/image-generator/image-generator.spec.ts
+E2E-07-01,VID-01,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-02,VID-02,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-03,VID-03,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-04,VID-04,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-05,VID-05,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-06,VID-06,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-07,VID-07,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-08,VID-08,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-09,VID-09,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-10,VID-10,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-11,VID-11,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-12,VID-12,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-13,VID-13,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-14,VID-14,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-15,VID-15,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-16,VID-16,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-17,VID-17,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-18,VID-18,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-19,VID-19,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-20,VID-20,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-21,VID-21,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-22,VID-22,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-23,VID-23,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-24,VID-24,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-25,VID-25,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-26,VID-26,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-27,VID-27,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-28,VID-28,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-29,VID-29,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-30,VID-30,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-31,VID-31,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-32,VID-32,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-33,VID-33,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-34,VID-34,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-35,VID-35,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-36,VID-36,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-37,VID-37,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-38,VID-38,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-39,VID-39,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-40,VID-40,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-07-41,VID-41,Video Generator,tests/e2e/video-generator/video-generator.spec.ts
+E2E-08-(otomatis),SEO-(otomatis),SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-08-01,SEO-01,SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-08-02,SEO-02,SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-08-11,SEO-11,SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-08-12,SEO-12,SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-08-13,SEO-13,SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-08-14,SEO-14,SEO,tests/e2e/seo/seo-overview.spec.ts
+E2E-09-(otomatis),MEDIA-(otomatis),Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-01,MEDIA-01,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-01,MEDIA-01,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-02,MEDIA-02,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-06,MEDIA-06,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-07,MEDIA-07,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-08,MEDIA-08,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-09,MEDIA-09,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-10,MEDIA-10,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-11,MEDIA-11,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-12,MEDIA-12,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-13,MEDIA-13,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-14,MEDIA-14,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-15,MEDIA-15,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-09-16,MEDIA-16,Media Library,tests/e2e/media-library/media-library.spec.ts
+E2E-10-(otomatis),BRAND-(otomatis),Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-01,BRAND-01,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-02,BRAND-02,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-13,BRAND-13,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-14,BRAND-14,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-15,BRAND-15,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-16,BRAND-16,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-17,BRAND-17,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-18,BRAND-18,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-19,BRAND-19,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-20,BRAND-20,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-21,BRAND-21,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-10-22,BRAND-22,Brand Hub,tests/e2e/brand-hub/brand-hub.spec.ts
+E2E-11-01,CAMP-01,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-02,CAMP-02,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-03,CAMP-03,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-04,CAMP-04,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-05,CAMP-05,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-06,CAMP-06,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-07,CAMP-07,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-08,CAMP-08,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-09,CAMP-09,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-10,CAMP-10,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-11,CAMP-11,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-12,CAMP-12,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-13,CAMP-13,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-14,CAMP-14,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-11-15,CAMP-15,Campaign,tests/e2e/campaign/campaign.spec.ts
+E2E-12-01,BILL-01,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-02,BILL-02,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-03,BILL-03,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-04,BILL-04,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-05,BILL-05,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-06,BILL-06,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-07,BILL-07,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-08,BILL-08,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-09,BILL-12,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-10,BILL-13,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-11,BILL-14,Billing,tests/e2e/billing/billing.spec.ts
+E2E-12-12,BILL-15,Billing,tests/e2e/billing/billing.spec.ts

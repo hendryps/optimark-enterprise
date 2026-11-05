@@ -11,8 +11,8 @@
  * Prompt berikutnya tidak pernah dikirim sebelum jawaban sebelumnya selesai (tidak menumpuk antrean).
  * Pengecualian: ASST-10 (konteks) dan ASST-11 (urutan pesan) memang butuh dua prompt dalam satu chat.
  */
-import { expect, meta, test } from '../../src/fixtures';
-import { rx } from '../../src/utils/text';
+import { expect, meta, test } from '../../../src/fixtures';
+import { rx } from '../../../src/utils/text';
 
 const NEED_AI = 'Butuh akun dengan saldo token dan jawaban AI';
 
@@ -186,7 +186,9 @@ test.describe('AI Assistant', () => {
   test('ASST-24 feedback negatif', meta({ skip: NEED_AI }), async () => {});
   test('ASST-25 penggunaan token', meta({ skip: NEED_AI, tokens: true }), async () => {});
 
-  test('ASST-26 batas token', async ({ assistant, unfunded }) => {
+  test('ASST-26 batas token', meta({
+    bug: 'Pesan tetap dikirim dan dijawab AI saat saldo token 0 (tidak ada pesan token tidak cukup)',
+  }), async ({ assistant, unfunded }) => {
     // Saldo tidak cukup: permintaan tidak diproses, muncul info token tidak cukup, saldo tidak negatif.
     const before = await assistant.tokenBalance();
     await assistant.input.fill(P_TOKEN);

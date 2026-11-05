@@ -6,9 +6,9 @@
  * Test yang membuat post nyata ditandai destructive.
  * Bug yang sudah tercatat di sheet (status Fail) ditandai `bug: ...` (diharapkan gagal).
  */
-import { STATUS_TABS, TAB_DRAFT, TAB_PUBLISHED, TAB_SCHEDULED } from '../../src/pages/content-composer-page';
-import { expect, meta, test } from '../../src/fixtures';
-import { num, rx } from '../../src/utils/text';
+import { STATUS_TABS, TAB_DRAFT, TAB_PUBLISHED, TAB_SCHEDULED } from '../../../src/pages/content-composer-page';
+import { expect, meta, test } from '../../../src/fixtures';
+import { num, rx } from '../../../src/utils/text';
 
 const NEED_PLATFORM = 'Butuh akun QA dengan platform (TikTok) terhubung';
 
