@@ -15,7 +15,7 @@ export class BrandHubPage extends BasePage {
   /** Buka Brand Hub dan tunggu tab Overview tampil. */
   async open(): Promise<this> {
     await this.goto('/brand-hub');
-    await expect(this.tab('Overview')).toBeVisible({ timeout: 30_000 });
+    await expect(this.tab('Overview')).toBeVisible({ timeout: 20_000 });
     return this;
   }
 

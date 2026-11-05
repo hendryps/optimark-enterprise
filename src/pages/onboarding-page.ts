@@ -91,6 +91,6 @@ export class OnboardingPage extends BasePage {
     const finish = this.page.getByRole('button', { name: 'Finish' });
     await expect(finish).toBeEnabled();
     await finish.click();
-    await expect(this.page).toHaveURL(rx('/dashboard'), { timeout: 60_000 });
+    await expect(this.page).toHaveURL(rx('/dashboard'), { timeout: 20_000 });
   }
 }

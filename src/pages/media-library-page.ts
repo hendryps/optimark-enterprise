@@ -9,7 +9,7 @@ export class MediaLibraryPage extends BasePage {
   /** Buka Media Library dan tunggu judulnya tampil. */
   async open(): Promise<this> {
     await this.goto('/media-library');
-    await expect(this.page.getByRole('heading', { name: 'Media Library' })).toBeVisible({ timeout: 30_000 });
+    await expect(this.page.getByRole('heading', { name: 'Media Library' })).toBeVisible({ timeout: 20_000 });
     return this;
   }
 

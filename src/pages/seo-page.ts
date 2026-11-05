@@ -13,7 +13,7 @@ export class SeoPage extends BasePage {
   /** Buka halaman SEO dan tunggu judul 'Growth Intel' tampil. */
   async open(): Promise<this> {
     await this.goto('/seo');
-    await expect(this.page.getByRole('heading', { name: rx('Growth Intel') })).toBeVisible({ timeout: 30_000 });
+    await expect(this.page.getByRole('heading', { name: rx('Growth Intel') })).toBeVisible({ timeout: 20_000 });
     return this;
   }
 

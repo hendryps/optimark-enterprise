@@ -43,7 +43,7 @@ export class ForgotPasswordPage extends AuthPage {
       await this.sendButton.click();
       const limit = this.page.getByText(rx('Too many attempts'));
       const sent = this.page.getByText(rx('Email Sent')).first();
-      await expect(limit.or(sent).first()).toBeVisible({ timeout: 30_000 });
+      await expect(limit.or(sent).first()).toBeVisible({ timeout: 20_000 });
       if (!(await limit.count())) return;
       const seconds = Number((await limit.innerText()).match(/(\d+)\s*seconds?/i)?.[1] ?? 60);
       await this.page.waitForTimeout((seconds + 2) * 1000);
@@ -58,7 +58,7 @@ export class ForgotPasswordPage extends AuthPage {
 
   /** Layar 'Email Sent' tampil beserta hitung mundur kirim ulang. */
   async expectEmailSent(): Promise<void> {
-    await expect(this.page.getByText(rx('Email Sent')).first()).toBeVisible({ timeout: 30_000 });
+    await expect(this.page.getByText(rx('Email Sent')).first()).toBeVisible({ timeout: 20_000 });
     await expect(this.page.getByText(rx('check your email'))).toBeVisible();
     await expect(this.page.getByText(rx('Resend available in'))).toBeVisible();
   }
@@ -84,7 +84,7 @@ export class ResetPasswordPage extends AuthPage {
   /** Buka link reset dari email. */
   async openLink(link: string): Promise<void> {
     await this.page.goto(link);
-    await expect(this.newPassword).toBeVisible({ timeout: 30_000 });
+    await expect(this.newPassword).toBeVisible({ timeout: 20_000 });
   }
 
   /** Isi password baru + konfirmasi (default sama) lalu klik Save. */

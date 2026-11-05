@@ -6,7 +6,7 @@
  * di staging: Model (Seedance 2.0), Aspect ratio, Resolution, Duration, dan toggle Audio.
  */
 import { expect, meta, test } from '../../src/fixtures';
-import { rx, rxExact } from '../../src/utils/text';
+import { num, rx, rxExact } from '../../src/utils/text';
 
 const PROMPT = 'Video sinematik kopi susu dituangkan ke dalam gelas dengan gerakan lambat.';
 const NEED_TOKEN = 'Butuh saldo token untuk generate video';
@@ -153,16 +153,16 @@ test.describe('Video Generator', () => {
   });
 
   // VID-20 .. VID-25: rasio, resolusi, dan durasi (nilai pilihan atau opsi lain).
-  const configCases: [string, string, string | null][] = [
-    ['VID-20', 'Aspect ratio', '16:9'],
-    ['VID-21', 'Aspect ratio', null],
-    ['VID-22', 'Resolution', '720p'],
-    ['VID-23', 'Resolution', null],
-    ['VID-24', 'Duration', '5s'],
-    ['VID-25', 'Duration', null],
+  const configCases: [string, string | null][] = [
+    ['Aspect ratio', '16:9'],
+    ['Aspect ratio', null],
+    ['Resolution', '720p'],
+    ['Resolution', null],
+    ['Duration', '5s'],
+    ['Duration', null],
   ];
-  for (const [id, label, preferred] of configCases) {
-    test(`${id} konfigurasi ${label}${preferred ? ` ${preferred}` : ' (opsi lain)'}`, async ({ videoGen }) => {
+  for (const [index, [label, preferred]] of configCases.entries()) {
+    test(`VID-${num(20 + index)} konfigurasi ${label}${preferred ? ` ${preferred}` : ' (opsi lain)'}`, async ({ videoGen }) => {
       // Rasio/resolusi/durasi bisa dipilih: nilai preferensi atau opsi lain.
       const options = await videoGen.options(label);
       let target: string;

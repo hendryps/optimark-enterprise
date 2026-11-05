@@ -80,7 +80,7 @@ export class RegisterPage extends AuthPage {
    */
   async expectCheckEmailScreen(): Promise<void> {
     const done = this.resendButton.or(this.page.getByText(RATE_LIMIT));
-    await expect(done.first()).toBeVisible({ timeout: 30_000 });
+    await expect(done.first()).toBeVisible({ timeout: 20_000 });
     if (await this.page.getByText(RATE_LIMIT).count()) {
       test.skip(true, "Server staging membatasi percobaan registrasi ('Too many attempts'). Ulangi ~15 menit lagi.");
     }
@@ -122,7 +122,7 @@ export class VerifyEmailPage extends AuthPage {
 
   /** Isi password lalu klik tombol verifikasi TANPA menunggu hasil (untuk skenario gagal). */
   async submitPassword(password: string): Promise<void> {
-    await expect(this.passwordInput).toBeVisible({ timeout: 30_000 });
+    await expect(this.passwordInput).toBeVisible({ timeout: 20_000 });
     await this.passwordInput.fill(password);
     await this.verifyButton.click();
   }
@@ -130,6 +130,6 @@ export class VerifyEmailPage extends AuthPage {
   /** Isi password lalu klik verifikasi. Berhasil = otomatis login dan masuk ke /onboarding. */
   async verify(password: string): Promise<void> {
     await this.submitPassword(password);
-    await expect(this.page).toHaveURL(rx('/onboarding', '/dashboard'), { timeout: 30_000 });
+    await expect(this.page).toHaveURL(rx('/onboarding', '/dashboard'), { timeout: 20_000 });
   }
 }

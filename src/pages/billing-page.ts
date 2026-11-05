@@ -7,7 +7,7 @@ export class BillingPage extends BasePage {
   /** Buka halaman Billing dan tunggu judulnya tampil (halaman kadang lambat). */
   async open(): Promise<this> {
     await this.goto('/billing');
-    await expect(this.page.getByRole('heading', { name: 'Billing' }).first()).toBeVisible({ timeout: 30_000 });
+    await expect(this.page.getByRole('heading', { name: 'Billing' }).first()).toBeVisible({ timeout: 20_000 });
     return this;
   }
 

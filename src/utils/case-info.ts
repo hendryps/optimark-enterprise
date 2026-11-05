@@ -1,13 +1,13 @@
 /**
  * Penanda kondisi khusus sebuah test case: skip, bug yang sudah diketahui, memakai token, mengubah data.
  *
- * ID test case (mis. "AUTH-07") ditulis di JUDUL test, jadi bisa dipilih dengan `--grep`:
+ * ID test case (mis. "LOGIN-02") ditulis di JUDUL test, jadi bisa dipilih dengan `--grep`:
  *
- *   test('AUTH-07 login akun terdaftar', async ({ auth }) => { ... });
- *   test('AUTH-02 registrasi Google', meta({ skip: 'Butuh akun Google baru' }), async () => {});
+ *   test('LOGIN-02 login berhasil', async ({ auth }) => { ... });
+ *   test('REG-02 registrasi Google', meta({ skip: 'Butuh akun Google baru' }), async () => {});
  *   test('ASST-02 kirim dengan tombol', meta({ tokens: true, bug: 'Caption tidak selesai' }), async ({ assistant }) => { ... });
  *
- *   npx playwright test --grep "AUTH-07"
+ *   npx playwright test --grep "LOGIN-02"
  */
 
 /** Pilihan tambahan untuk sebuah test case (semuanya opsional). */

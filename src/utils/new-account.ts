@@ -178,7 +178,7 @@ export class NewAccount {
     const link = await this.ensureResetLink(forgotPage, mailbox);
     await resetPage.openLink(link);
     await resetPage.save(NEW_PASSWORD);
-    await expect(resetPage.page).toHaveURL(/\/login\?reset=success/, { timeout: 30_000 });
+    await expect(resetPage.page).toHaveURL(/\/login\?reset=success/, { timeout: 20_000 });
     this.state.resetUsed = true;
     this.state.usedLink = link; // link yang sudah dipakai (untuk test "link tidak bisa dipakai dua kali")
     this.state.passwordChanged = true;

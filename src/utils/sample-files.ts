@@ -19,7 +19,6 @@ export interface FilePayload {
 /** Kumpulan file contoh. */
 export interface SampleFiles {
   png: FilePayload;
-  jpg: FilePayload;
   pdf: FilePayload;
   /** Gambar > 2 MB. */
   big: FilePayload;
@@ -57,7 +56,6 @@ function pngBytes(padBytes = 0): Buffer {
 export function createSampleFiles(): SampleFiles {
   return {
     png: { name: 'logo.png', mimeType: 'image/png', buffer: pngBytes() },
-    jpg: { name: 'logo.jpg', mimeType: 'image/jpeg', buffer: pngBytes() }, // isi PNG, ekstensi JPG
     pdf: { name: 'dokumen.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4\n%%EOF\n') },
     big: { name: 'logo-besar.png', mimeType: 'image/png', buffer: pngBytes(2_200_000) },
     huge: { name: 'gambar-besar.png', mimeType: 'image/png', buffer: pngBytes(30_000_000) },

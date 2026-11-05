@@ -29,3 +29,6 @@ export function firstInt(raw: string): number {
   if (!match) throw new Error(`Tidak ada angka di: ${JSON.stringify(raw)}`);
   return parseInt(match[0].replace(/[.,]/g, ''), 10);
 }
+
+/** Nomor test case dua digit, mis. 7 -> '07'. */
+export const num = (n: number): string => String(n).padStart(2, '0');

@@ -36,12 +36,12 @@ export default defineConfig({
     headless: env.headless,
     launchOptions: { slowMo: env.slowMo },
     actionTimeout: env.defaultTimeoutMs,
-    navigationTimeout: 60_000, // staging kadang lambat memuat halaman
+    navigationTimeout: 20_000, // maksimal 20 detik menunggu halaman termuat
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     // Video tidak diatur di sini: tab dibuat manual di src/fixtures/sessions.ts, video direkam dan
     // dilampirkan ke laporan HTML dari sana (hanya untuk test yang gagal).
   },
-  // Browser test: Mozilla Firefox.
-  projects: [{ name: 'firefox', use: { browserName: 'firefox' } }],
+  // Browser test: Google Chrome (harus terpasang di komputer; bukan Chromium bawaan Playwright).
+  projects: [{ name: 'chrome', use: { browserName: 'chromium', channel: 'chrome' } }],
 });

@@ -1,6 +1,6 @@
 /** Page object halaman Login (/login) dan Register (/register). */
-import { errors, expect, type Locator } from '@playwright/test';
-import { rx, rxExact } from '../utils/text';
+import { expect, test, type Locator } from '@playwright/test';
+import { rx } from '../utils/text';
 import { BasePage } from './base-page';
 
 /** Halaman Login dan Register. Staging punya dua cara masuk: Google dan email + password. */
@@ -59,7 +59,36 @@ export class AuthPage extends BasePage {
     await this.email.fill(email);
     await this.password.fill(password);
     await this.signInButton.click();
-    await expect(this.page).toHaveURL(rx('/dashboard', '/onboarding'), { timeout: 30_000 }); // staging kadang lambat
+    // Tunggu salah satu: masuk ke aplikasi, ATAU pesan batas percobaan dari server.
+    const entered = rx('/dashboard', '/onboarding');
+    await Promise.race([
+      this.page.waitForURL(entered, { timeout: 20_000 }),
+      this.rateLimitMessage.first().waitFor({ timeout: 20_000 }),
+    ]).catch(() => {}); // kegagalan sebenarnya dilaporkan oleh expect di bawah
+    await this.skipIfRateLimited();
+    await expect(this.page).toHaveURL(entered, { timeout: 5_000 });
+  }
+
+  /** Pesan batas percobaan dari server, mis. "Too many attempts. Please try again in 898 seconds." */
+  get rateLimitMessage(): Locator {
+    return this.page.getByText(rx('Too many attempts', 'Terlalu banyak percobaan'));
+  }
+
+  /** Server staging membatasi percobaan login (~15 menit). Itu bukan bug fitur, jadi test di-SKIP, bukan gagal. */
+  async skipIfRateLimited(): Promise<void> {
+    if (await this.rateLimitMessage.count()) {
+      test.skip(true, "Server staging membatasi percobaan login ('Too many attempts'). Ulangi ~15 menit lagi.");
+    }
+  }
+
+  /**
+   * Pastikan login DITOLAK dengan pesan error (banner merah). `message` opsional: kalau diisi, isi banner dicek.
+   * Kalau yang tampil justru pesan batas percobaan, test di-SKIP.
+   */
+  async expectRejected(message?: RegExp): Promise<void> {
+    await expect(this.errorBanner.or(this.rateLimitMessage).first()).toBeVisible();
+    await this.skipIfRateLimited();
+    if (message) await expect(this.errorBanner).toContainText(message);
   }
 
   /**
@@ -79,7 +108,7 @@ export class AuthPage extends BasePage {
   }
 
   // ---------------------------------------------------------------- pengecekan komponen halaman
-  /** Komponen halaman Login (AUTH-06). */
+  /** Komponen halaman Login (LOGIN-01). */
   async expectLoginPage(): Promise<void> {
     await expect(this.page.getByRole('heading', { name: rx('Welcome Back', 'Selamat Datang') })).toBeVisible();
     await expect(this.googleButton).toBeVisible();
@@ -88,76 +117,12 @@ export class AuthPage extends BasePage {
     await expect(this.page.getByRole('img', { name: 'Optimark' })).toBeVisible(); // logo
   }
 
-  /** Komponen halaman Register (AUTH-01). */
+  /** Komponen halaman Register (REG-01). */
   async expectRegisterPage(): Promise<void> {
     await expect(this.page.getByRole('heading', { name: rx('Create Account', 'Buat Akun') })).toBeVisible();
     await expect(this.googleButton).toBeVisible();
     await expect(this.page.getByRole('link', { name: rx('Sign in', 'Login', 'Masuk') })).toBeVisible();
     await expect(this.page.getByRole('link', { name: rx('Privacy Policy') })).toBeVisible();
     await expect(this.page.getByRole('img', { name: 'Optimark' })).toBeVisible(); // logo
-  }
-
-  /**
-   * Klik 'Continue with Google' lalu batalkan.
-   * Google bisa terbuka sebagai popup (ditutup) atau pindah halaman penuh (kembali ke halaman sebelumnya).
-   * Staging memakai pindah halaman penuh.
-   */
-  async clickGoogleAndClosePopup(): Promise<void> {
-    try {
-      const [popup] = await Promise.all([this.page.waitForEvent('popup', { timeout: 3000 }), this.googleButton.click()]);
-      await popup.close();
-    } catch (error) {
-      if (!(error instanceof errors.TimeoutError)) throw error;
-      // Tidak ada popup -> tombol sudah diklik dan halaman berpindah ke Google
-      await this.page.waitForURL(/accounts\.google\.com/);
-      await this.page.goBack();
-      await expect(this.googleButton).toBeVisible();
-    }
-  }
-
-  // ---------------------------------------------------------------- login Google (halaman accounts.google.com)
-  /** Kolom 'Email or phone' di halaman Google. */
-  get googleEmailInput(): Locator {
-    return this.page.getByRole('textbox', { name: rx('Email or phone', 'Email atau ponsel') });
-  }
-
-  /** Kolom 'Enter your password' di halaman Google. */
-  get googlePasswordInput(): Locator {
-    return this.page.getByRole('textbox', { name: rx('Enter your password', 'Masukkan sandi Anda') });
-  }
-
-  /** Tombol 'Next' / 'Berikutnya' di halaman Google. */
-  get googleNextButton(): Locator {
-    return this.page.getByRole('button', { name: rxExact('Next', 'Berikutnya') });
-  }
-
-  /** Dari /login klik 'Continue with Google' sampai halaman Google tampil. */
-  async goToGoogleSignin(): Promise<void> {
-    await this.openLogin();
-    await this.googleButton.click();
-    await this.page.waitForURL(/accounts\.google\.com/, { timeout: 30_000 });
-    await expect(this.googleEmailInput).toBeVisible({ timeout: 30_000 });
-  }
-
-  /** Langkah 1 di Google: isi email lalu klik Next. */
-  async googleEnterEmail(email: string): Promise<void> {
-    await this.googleEmailInput.fill(email);
-    await this.googleNextButton.click();
-  }
-
-  /** Langkah 2 di Google: isi password lalu klik Next (hanya muncul kalau email dikenal). */
-  async googleEnterPassword(password: string): Promise<void> {
-    await expect(this.googlePasswordInput).toBeVisible({ timeout: 30_000 });
-    await this.googlePasswordInput.fill(password);
-    await this.googleNextButton.click();
-  }
-
-  /** Alur lengkap login Google sampai kembali ke aplikasi Optimark. */
-  async loginWithGoogle(email: string, password: string): Promise<void> {
-    await this.goToGoogleSignin();
-    await this.googleEnterEmail(email);
-    await this.googleEnterPassword(password);
-    // Setelah Google menerima akun, browser dikembalikan ke staging Optimark
-    await expect(this.page).toHaveURL(rx('/dashboard', '/onboarding'), { timeout: 60_000 });
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Menu Billing (BILL-01 .. BILL-12).
+ * Menu Billing (BILL-01 .. BILL-15).
  *
  * Tab 'e2e-billing' di Google Sheet masih kosong (hanya daftar ID); test ini dibuat dari UI staging
  * dan ID-nya usulan. Akun QA tanpa paket dan tanpa riwayat pembayaran; test yang butuh kondisi itu
@@ -7,6 +7,7 @@
  */
 import { expect, test, meta } from '../../src/fixtures';
 import { BasePage } from '../../src/pages/base-page';
+import { num } from '../../src/utils/text';
 
 /** Pilihan filter status pembayaran, urut sesuai tampilan. */
 const STATUSES = ['All statuses', 'Pending', 'Paid', 'Failed', 'Expired'];
@@ -52,35 +53,35 @@ test.describe('Billing', () => {
     expect(await BasePage.optionTexts(billing.statusFilter)).toEqual(STATUSES);
   });
 
-  // BILL-08: tiap status bisa dipilih.
-  for (const status of STATUSES.slice(1)) {
-    test(`BILL-08 pilih filter status ${status}`, async ({ billing }) => {
+  // BILL-08 .. BILL-11: tiap status bisa dipilih.
+  for (const [index, status] of STATUSES.slice(1).entries()) {
+    test(`BILL-${num(8 + index)} pilih filter status ${status}`, async ({ billing }) => {
       // Setiap status bisa dipilih tanpa error.
       await billing.statusFilter.selectOption({ label: status });
       await expect(billing.statusFilter.locator('option:checked')).toHaveText(status);
     });
   }
 
-  test('BILL-09 pencarian invoice', async ({ billing }) => {
+  test('BILL-12 pencarian invoice', async ({ billing }) => {
     // Kolom pencarian invoice/paket menerima teks.
     await billing.search.fill('INV-12345');
     await expect(billing.search).toHaveValue('INV-12345');
   });
 
-  test('BILL-10 refresh riwayat', async ({ billing }) => {
+  test('BILL-13 refresh riwayat', async ({ billing }) => {
     // Refresh memuat ulang riwayat tanpa meninggalkan halaman atau error.
     await billing.refreshButton.click();
     await billing.expectUrlContains('/billing');
     await expect(billing.page.getByRole('heading', { name: 'Payment history' })).toBeVisible();
   });
 
-  test('BILL-11 filter tanggal', async ({ billing }) => {
+  test('BILL-14 filter tanggal', async ({ billing }) => {
     // Filter tanggal: 'Select dates' dan tombol Apply tersedia.
     await billing.expectText('Select dates');
     await expect(billing.applyButton).toBeVisible();
   });
 
-  test('BILL-12 saldo token konsisten dengan sidebar', async ({ billing }) => {
+  test('BILL-15 saldo token konsisten dengan sidebar', async ({ billing }) => {
     // Panel token di sidebar menampilkan saldo dan pemakaian yang valid (bukan negatif).
     expect(await billing.tokenBalance()).toBeGreaterThanOrEqual(0);
     expect(await billing.tokenUsed()).toBeGreaterThanOrEqual(0);

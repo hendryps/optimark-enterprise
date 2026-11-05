@@ -20,7 +20,7 @@ export abstract class GeneratorPage extends BasePage {
   /** Buka halaman generator dan tunggu kolom prompt tampil. */
   async open(): Promise<this> {
     await this.goto(this.PATH);
-    await expect(this.prompt).toBeVisible({ timeout: 30_000 }); // halaman kadang lambat memuat
+    await expect(this.prompt).toBeVisible({ timeout: 20_000 }); // halaman kadang lambat memuat
     return this;
   }
 

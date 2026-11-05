@@ -8,7 +8,7 @@
  */
 import { STATUS_TABS, TAB_DRAFT, TAB_PUBLISHED, TAB_SCHEDULED } from '../../src/pages/content-composer-page';
 import { expect, meta, test } from '../../src/fixtures';
-import { rx } from '../../src/utils/text';
+import { num, rx } from '../../src/utils/text';
 
 const NEED_PLATFORM = 'Butuh akun QA dengan platform (TikTok) terhubung';
 
@@ -41,13 +41,13 @@ test.describe('Content Composer', () => {
   });
 
   // COMP-04 .. COMP-06: tiap tab status bisa dibuka.
-  const statusCases: [string, string, string[]][] = [
-    ['COMP-04', 'Draft', TAB_DRAFT],
-    ['COMP-05', 'Scheduled', TAB_SCHEDULED],
-    ['COMP-06', 'Published', TAB_PUBLISHED],
+  const statusCases: [string, string[]][] = [
+    ['Draft', TAB_DRAFT],
+    ['Scheduled', TAB_SCHEDULED],
+    ['Published', TAB_PUBLISHED],
   ];
-  for (const [id, name, tab] of statusCases) {
-    test(`${id} tab status ${name}`, async ({ composer }) => {
+  for (const [index, [name, tab]] of statusCases.entries()) {
+    test(`COMP-${num(4 + index)} tab status ${name}`, async ({ composer }) => {
       // Tab status bisa dibuka dan menampilkan daftar atau state kosong.
       await composer.statusTab(tab).click();
       await expect(composer.statusTab(tab)).toHaveAttribute('aria-selected', 'true');

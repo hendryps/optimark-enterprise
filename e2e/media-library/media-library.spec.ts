@@ -21,8 +21,7 @@
  */
 import { MEDIA_CATEGORIES } from '../../src/pages/media-library-page';
 import { expect, test, meta } from '../../src/fixtures';
-
-const num = (n: number) => String(n).padStart(2, '0');
+import { num } from '../../src/utils/text';
 
 test.describe('Media Library', () => {
   test('MEDIA-01 akses halaman', async ({ mediaLibrary }) => {
@@ -48,7 +47,7 @@ test.describe('Media Library', () => {
 
   // MEDIA-03 .. MEDIA-05: kategori Images, Videos, Articles. Tiap varian punya ID sendiri.
   MEDIA_CATEGORIES.slice(1).forEach((name, index) => {
-    test(`MEDIA-${num(index + 3)} kategori ${name}`, async ({ mediaLibrary }) => {
+    test(`MEDIA-${num(3 + index)} kategori ${name}`, async ({ mediaLibrary }) => {
       // Kategori bisa dipilih dan menjadi aktif.
       await mediaLibrary.category(name).click();
       expect(await mediaLibrary.isActive(mediaLibrary.category(name))).toBe(true); // yang diklik jadi aktif

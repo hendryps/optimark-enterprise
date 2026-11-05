@@ -7,14 +7,14 @@ export class CampaignPage extends BasePage {
   /** Buka daftar campaign. */
   async open(): Promise<this> {
     await this.goto('/campaign');
-    await expect(this.page.getByRole('heading', { name: 'Campaign' }).first()).toBeVisible({ timeout: 30_000 });
+    await expect(this.page.getByRole('heading', { name: 'Campaign' }).first()).toBeVisible({ timeout: 20_000 });
     return this;
   }
 
   /** Langsung buka form 'Create New Campaign'. */
   async openCreate(): Promise<this> {
     await this.goto('/campaign/create');
-    await expect(this.page.getByRole('heading', { name: rx('Create New Campaign') })).toBeVisible({ timeout: 30_000 });
+    await expect(this.page.getByRole('heading', { name: rx('Create New Campaign') })).toBeVisible({ timeout: 20_000 });
     return this;
   }
 

@@ -10,7 +10,7 @@ Butuh **Node.js 20 atau lebih baru**.
 
 ```bash
 npm install                      # pasang semua paket
-npx playwright install firefox   # pasang browser untuk test (Mozilla Firefox)
+                                 # browser test = Google Chrome (pasang Chrome biasa; atau: npx playwright install chrome)
 copy .env.example .env           # lalu isi USER_EMAIL / USER_PASSWORD (file .env tidak di-commit)
 ```
 
@@ -30,7 +30,7 @@ npm run typecheck                     # cek kesalahan penulisan kode TypeScript
 npx playwright test e2e/dashboard                    # satu folder (satu menu)
 npx playwright test e2e/auth/login.spec.ts           # satu file
 npx playwright test -g "DASH-10"                     # satu test berdasarkan ID di judul
-npx playwright test -g "LOGIN-EN"                    # semua test yang judulnya memuat teks itu
+npx playwright test -g "LOGIN"                       # semua test yang judulnya memuat teks itu (satu fitur)
 npx playwright test --ui                             # mode UI interaktif (enak untuk debugging)
 ```
 
@@ -78,7 +78,7 @@ test('BILL-04 View plans tersedia', async ({ billing }) => {
 import { expect, meta, test } from '../../src/fixtures';
 
 // Belum bisa diotomasi -> dilewati dengan alasan
-test('AUTH-02 registrasi Google', meta({ skip: 'Butuh akun Google baru' }), async () => {});
+test('REG-02 registrasi Google', meta({ skip: 'Butuh akun Google baru' }), async () => {});
 
 // Bug yang sudah diketahui -> DIHARAPKAN gagal. Kalau tiba-tiba lolos, test dianggap gagal
 // sebagai sinyal bug sudah diperbaiki dan `bug` boleh dilepas.
@@ -111,7 +111,6 @@ Akun QA bisa berubah (saldo habis, belum ada konten). Tambahkan fixture ini di p
 | `USER_EMAIL` / `USER_PASSWORD` | Akun QA utama (wajib) |
 | `USER_B_EMAIL/PASSWORD` | Akun kedua, untuk test isolasi data (opsional) |
 | `NEW_USER_EMAIL/PASSWORD` | Akun yang BELUM onboarding, untuk seluruh test onboarding (di-skip tanpa ini) |
-| `GOOGLE_EMAIL/PASSWORD` | Akun Google untuk test "Continue with Google" (di-skip tanpa ini) |
 | `HEADLESS` | `false` = browser tampil (default), `true` = tidak tampil |
 | `SLOW_MO` | Jeda tiap aksi (ms) supaya jalannya test mudah diikuti |
 | `GENERATE_TIMEOUT_MS` | Batas tunggu AI generate |

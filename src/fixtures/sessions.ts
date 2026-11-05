@@ -53,7 +53,7 @@ export async function openSession(browser: Browser, options: SessionOptions = {}
     recordVideo: { dir: videoDir, size: { width: 1280, height: 720 } },
   });
   context.setDefaultTimeout(options.timeoutMs ?? env.defaultTimeoutMs);
-  context.setDefaultNavigationTimeout(60_000); // staging kadang lambat memuat halaman
+  context.setDefaultNavigationTimeout(20_000); // staging kadang lambat memuat halaman
   const page = await context.newPage();
 
   // Trace dan screenshot saat test gagal direkam otomatis oleh Playwright (lihat `use` di playwright.config.ts).
@@ -93,7 +93,7 @@ export async function loginState(browser: Browser, role: Role, testInfo: TestInf
   fs.mkdirSync(AUTH_DIR, { recursive: true });
   const context = await browser.newContext({ baseURL: env.baseUrl });
   context.setDefaultTimeout(env.defaultTimeoutMs);
-  context.setDefaultNavigationTimeout(60_000);
+  context.setDefaultNavigationTimeout(20_000);
   const page = await context.newPage();
   try {
     const auth = new AuthPage(page);

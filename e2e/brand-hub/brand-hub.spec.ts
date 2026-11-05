@@ -8,11 +8,9 @@
  */
 import { BRAND_TABS, COMING_SOON } from '../../src/pages/brand-hub-page';
 import { expect, test, meta } from '../../src/fixtures';
-import { rx } from '../../src/utils/text';
+import { num, rx } from '../../src/utils/text';
 
 /** Nomor urut dua digit untuk ID test, mis. 3 -> "03". */
-const num = (n: number) => String(n).padStart(2, '0');
-
 test.describe('Brand Hub', () => {
   test('BRAND-01 akses halaman', async ({ brandHub }) => {
     // Ketujuh tab Brand Hub tampil dan Overview aktif.
@@ -29,7 +27,7 @@ test.describe('Brand Hub', () => {
 
   // BRAND-03 .. BRAND-08: setiap tab (selain Overview) bisa dibuka.
   BRAND_TABS.slice(1).forEach((name, index) => {
-    test(`BRAND-${num(index + 3)} buka tab ${name}`, async ({ brandHub }) => {
+    test(`BRAND-${num(3 + index)} buka tab ${name}`, async ({ brandHub }) => {
       // Setiap tab bisa dibuka dan menjadi aktif.
       await brandHub.openTab(name);
       await expect(brandHub.tab('Overview')).toHaveAttribute('aria-selected', 'false');
@@ -38,7 +36,7 @@ test.describe('Brand Hub', () => {
 
   // BRAND-09 .. BRAND-12: bagian yang belum tersedia.
   COMING_SOON.forEach((name, index) => {
-    test(`BRAND-${num(index + 9)} bagian belum tersedia: ${name}`, async ({ brandHub }) => {
+    test(`BRAND-${num(9 + index)} bagian belum tersedia: ${name}`, async ({ brandHub }) => {
       // Bagian yang belum jadi menampilkan 'being prepared' dan tombol Back to Overview yang berfungsi.
       await brandHub.openTab(name);
       await brandHub.expectText('being prepared');

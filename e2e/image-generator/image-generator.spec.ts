@@ -7,7 +7,7 @@
  * Test konfigurasi/validasi/UI tidak memakai token.
  */
 import { expect, meta, test } from '../../src/fixtures';
-import { rx } from '../../src/utils/text';
+import { num, rx } from '../../src/utils/text';
 
 const PROMPT = 'Buat poster promosi kopi susu gula aren dengan gaya modern.';
 const NEED_TOKEN = 'Butuh saldo token untuk generate';
@@ -89,14 +89,14 @@ test.describe('Image Generator', () => {
 
   test('IMG-10 rasio 1:1', meta({ tokens: true, skip: NEED_TOKEN }), async () => {});
 
-  // IMG-11 / IMG-13 / IMG-15: pilihan rasio, kualitas, dan style bisa diubah.
-  const configCases: [string, string, string | null][] = [
-    ['IMG-11', 'Aspect ratio', '3:2'],
-    ['IMG-13', 'Quality', 'High'],
-    ['IMG-15', 'Style', null],
+  // IMG-11 .. IMG-13: pilihan rasio, kualitas, dan style bisa diubah.
+  const configCases: [string, string | null][] = [
+    ['Aspect ratio', '3:2'],
+    ['Quality', 'High'],
+    ['Style', null],
   ];
-  for (const [id, label, option] of configCases) {
-    test(`${id} konfigurasi dapat diubah: ${label}`, async ({ imageGen }) => {
+  for (const [index, [label, option]] of configCases.entries()) {
+    test(`IMG-${num(11 + index)} konfigurasi dapat diubah: ${label}`, async ({ imageGen }) => {
       // Pilihan rasio/kualitas/style berubah dan tampil pada tombol konfigurasi.
       const options = await imageGen.options(label);
       const current = await imageGen.current(label);
@@ -108,14 +108,14 @@ test.describe('Image Generator', () => {
     });
   }
 
-  test('IMG-12 kualitas sedang', async ({ imageGen }) => {
+  test('IMG-14 kualitas sedang', async ({ imageGen }) => {
     // Kualitas default adalah Medium dan bisa dipilih.
     expect(await imageGen.current('Quality')).toContain('Medium');
     await imageGen.choose('Quality', 'Medium');
     expect(await imageGen.current('Quality')).toContain('Medium');
   });
 
-  test('IMG-14 style default', async ({ imageGen }) => {
+  test('IMG-15 style default', async ({ imageGen }) => {
     // Style default adalah Default dan bisa dipilih.
     expect(await imageGen.current('Style')).toContain('Default');
     await imageGen.choose('Style', 'Default');

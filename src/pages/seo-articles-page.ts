@@ -17,7 +17,7 @@ export class ArticlesPage extends BasePage {
   /** Buka daftar artikel dan tunggu judul 'Articles Management' tampil. */
   async openList(): Promise<this> {
     await this.goto(LIST_PATH);
-    await expect(this.listHeading).toBeVisible({ timeout: 30_000 });
+    await expect(this.listHeading).toBeVisible({ timeout: 20_000 });
     await expect(this.page.getByText(rx('Total Articles'))).toBeVisible();
     return this;
   }
@@ -25,7 +25,7 @@ export class ArticlesPage extends BasePage {
   /** Buka form New Article dan tunggu kolom Title tampil. */
   async openCreate(): Promise<this> {
     await this.goto(CREATE_PATH);
-    await expect(this.titleInput).toBeVisible({ timeout: 30_000 });
+    await expect(this.titleInput).toBeVisible({ timeout: 20_000 });
     return this;
   }
 
@@ -150,7 +150,7 @@ export class ArticlesPage extends BasePage {
     await this.openCreate();
     await this.fillAll(title, author);
     await this.createButton.click();
-    await expect(this.page).toHaveURL(new RegExp(`${LIST_PATH}/?$`), { timeout: 30_000 });
-    await expect(this.card(title)).toBeVisible({ timeout: 30_000 });
+    await expect(this.page).toHaveURL(new RegExp(`${LIST_PATH}/?$`), { timeout: 20_000 });
+    await expect(this.card(title)).toBeVisible({ timeout: 20_000 });
   }
 }
