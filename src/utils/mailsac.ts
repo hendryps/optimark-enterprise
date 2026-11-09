@@ -18,8 +18,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../config/env';
 
-/** Password dummy yang memenuhi aturan Optimark: 8-15 karakter, ada angka, huruf besar, huruf kecil, simbol. */
-const DEFAULT_PASSWORD = 'Optimark#2026';
 /** Password baru yang dipakai saat test reset password. */
 export const NEW_PASSWORD = 'Baru#Optimark26';
 
@@ -28,7 +26,7 @@ const FIRST_NAMES = ['rizky', 'dimas', 'anindya', 'salsabila', 'bagas', 'nadia',
 const LAST_NAMES = ['pratama', 'anggara', 'wijaya', 'kusuma', 'lestari', 'santoso', 'permata', 'ramadhan', 'hakim', 'putri'];
 
 /** File pencatatan data tes yang BERHASIL registrasi (untuk ditempel ke Google Sheet). */
-const TEST_DATA_CSV = path.join(ROOT, 'playwright-report', 'test-data-registrasi.csv');
+const TEST_DATA_CSV = path.join(ROOT, 'test-data', 'akun-registrasi.csv');
 
 /** Satu akun dummy: nama lengkap, email Mailsac, dan password. */
 export interface DummyUser {
@@ -50,6 +48,17 @@ function two(n: number): string {
 /** Huruf pertama kapital (rizky -> Rizky). */
 function title(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+/**
+ * Password acak BARU untuk tiap akun (11 karakter, memenuhi aturan 8-15: huruf besar, huruf kecil, angka, simbol).
+ * Contoh: "Kqmtz#4817x".
+ */
+function makePassword(): string {
+  const lower = 'abcdefghjkmnpqrstuvwxyz';
+  const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const chars = (set: string, n: number) => Array.from({ length: n }, () => pick([...set])).join('');
+  return `${chars(upper, 1)}${chars(lower, 4)}${pick([...'#@$!%*?&'])}${chars('0123456789', 4)}${chars(lower, 1)}`;
 }
 
 /**
@@ -90,7 +99,7 @@ export function makeDummyUser(): DummyUser {
     if (used.names.has(fullName.toLowerCase()) || used.emails.has(email)) continue;
     fs.mkdirSync(path.dirname(USED_FILE), { recursive: true });
     fs.appendFileSync(USED_FILE, `${fullName}|${email}\n`, 'utf8');
-    return { fullName, email, password: DEFAULT_PASSWORD };
+    return { fullName, email, password: makePassword() };
   }
   throw new Error('Semua kombinasi nama sudah terpakai. Tambahkan nama baru ke FIRST_NAMES / LAST_NAMES di src/utils/mailsac.ts.');
 }
@@ -102,7 +111,7 @@ export function extractLink(mailText: string, pathHint: string): string {
   return url;
 }
 
-/** Catat satu baris data tes yang berhasil ke playwright-report/test-data-registrasi.csv. */
+/** Catat satu baris data tes yang berhasil ke test-data/akun-registrasi.csv (folder ini tidak dihapus Playwright). */
 export function recordTestData(caseId: string, user: DummyUser, note: string): void {
   fs.mkdirSync(path.dirname(TEST_DATA_CSV), { recursive: true });
   const isNew = !fs.existsSync(TEST_DATA_CSV);

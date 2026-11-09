@@ -18,7 +18,7 @@ import { AuthPage } from '../pages/auth-page';
 import { ForgotPasswordPage, ResetPasswordPage } from '../pages/forgot-password-page';
 import { OnboardingPage } from '../pages/onboarding-page';
 import { RegisterPage, VerifyEmailPage } from '../pages/register-page';
-import { extractLink, makeDummyUser, Mailsac, NEW_PASSWORD, type DummyUser } from './mailsac';
+import { extractLink, makeDummyUser, Mailsac, NEW_PASSWORD, recordTestData, type DummyUser } from './mailsac';
 
 /** Subjek email dari Optimark (nama brand di email masih "Digimar", jadi dicocokkan dengan pola). */
 export const VERIFY_SUBJECT = 'Verify your .* account';
@@ -110,6 +110,7 @@ export class NewAccount {
     this.state.registered = true;
     this.state.checkEmailText = await registerPage.page.innerText('body');
     this.save();
+    recordTestData('REGISTER', this.state.user, 'Terdaftar, BELUM verifikasi email');
   }
 
   // ---------------------------------------------------------------- langkah 2: baca email verifikasi
@@ -133,6 +134,7 @@ export class NewAccount {
     await tab.verify(this.state.user.password);
     this.state.verified = true;
     this.save();
+    recordTestData('VERIFY', this.state.user, 'Email terverifikasi, bisa login (onboarding mungkin belum selesai)');
     return tab;
   }
 

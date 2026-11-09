@@ -219,4 +219,91 @@ test.describe('Image Generator', () => {
     expect(await imageGen.tokenBalance()).toBe(before);
     await expect(imageGen.prompt).toBeVisible();
   });
+
+  // =====================================================================================
+  // Fitur tambahan versi terbaru (acuan UI/UX: artifact; elemen diambil dari staging).
+  // Fokus fungsional saja; pengecekan tampilan ada di test UI terpisah.
+  // =====================================================================================
+  const CATEGORIES = ['Product Photography', 'Ad Creative', 'Reference Adaptation', 'Brand Campaign', 'Portrait'];
+
+  test('IMG-36 filter kategori template', async ({ imageGen }) => {
+    // Tiap chip kategori bisa dipilih (jadi aktif) dan galeri tetap berisi template.
+    await expect(imageGen.category('All')).toHaveAttribute('aria-pressed', 'true');
+    for (const name of CATEGORIES) {
+      await imageGen.category(name).click();
+      await expect(imageGen.category(name), `Chip ${name} tidak aktif setelah diklik`).toHaveAttribute('aria-pressed', 'true');
+      await expect(imageGen.category('All')).toHaveAttribute('aria-pressed', 'false');
+      await expect(imageGen.gallery().first()).toBeVisible();
+    }
+    await imageGen.category('All').click();
+    await expect(imageGen.category('All')).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('IMG-37 muat lebih banyak template', async ({ imageGen }) => {
+    // 'Load more' menambah jumlah kartu template.
+    const before = await imageGen.gallery().count();
+    await imageGen.loadMore.click();
+    await expect.poll(() => imageGen.gallery().count(), { message: 'Jumlah kartu tidak bertambah' }).toBeGreaterThan(before);
+  });
+
+  test('IMG-38 gunakan template', async ({ imageGen }) => {
+    // 'Use' memasang template di atas kotak prompt: muncul nama template, tombol lepas, upload foto produk, dan kolom perubahan.
+    await imageGen.useTemplate();
+    await expect(imageGen.templateStrip).toBeVisible();
+    await expect(imageGen.removeTemplate).toBeVisible();
+    await expect(imageGen.productUpload).toBeVisible();
+    await expect(imageGen.changesBox).toBeVisible();
+    await expect(imageGen.prompt).toHaveCount(0); // kolom prompt biasa digantikan kolom perubahan
+  });
+
+  test('IMG-39 template wajib foto produk', async ({ imageGen }) => {
+    // Template terpasang tanpa foto produk: tombol Generate nonaktif (foto produk berlabel Required).
+    await imageGen.useTemplate();
+    await expect(imageGen.productUpload).toHaveAccessibleName(/Required/i);
+    await expect(imageGen.generateButton).toBeDisabled();
+  });
+
+  test('IMG-40 lepas template', async ({ imageGen }) => {
+    // 'Remove template' mengembalikan kotak prompt biasa.
+    await imageGen.useTemplate();
+    await imageGen.removeTemplate.click();
+    await expect(imageGen.templateStrip).toHaveCount(0);
+    await expect(imageGen.prompt).toBeVisible();
+  });
+
+  test('IMG-41 template menyembunyikan kualitas dan style', async ({ imageGen }) => {
+    // Saat template dipakai, pilihan Quality dan Style tidak tersedia (Model, Orientation, jumlah tetap ada).
+    await expect(imageGen.optionButton('Quality')).toBeVisible();
+    await imageGen.useTemplate();
+    await expect(imageGen.optionButton('Quality')).toHaveCount(0);
+    await expect(imageGen.optionButton('Style')).toHaveCount(0);
+    for (const label of ['Model', 'Orientation', 'Number of images']) {
+      await expect(imageGen.optionButton(label)).toBeVisible();
+    }
+  });
+
+  test('IMG-42 template tidak mengubah saldo', async ({ imageGen }) => {
+    // Memilih / melepas template tidak memanggil generate dan tidak memotong token.
+    const before = await imageGen.tokenBalance();
+    await imageGen.useTemplate();
+    await imageGen.removeTemplate.click();
+    expect(await imageGen.tokenBalance()).toBe(before);
+  });
+
+  test('IMG-43 toggle Brand Hub', async ({ imageGen }) => {
+    // Brand Hub mati secara default, bisa dinyalakan, lalu dimatikan lagi.
+    await expect(imageGen.brandHub).toHaveAttribute('aria-pressed', 'false');
+    await imageGen.brandHub.click();
+    await expect(imageGen.brandHub).toHaveAttribute('aria-pressed', 'true');
+    await imageGen.brandHub.click();
+    await expect(imageGen.brandHub).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('IMG-44 biaya token di tombol Generate', async ({ imageGen }) => {
+    // Tombol Generate menampilkan biaya token per gambar (mis. "30 / Image").
+    await expect(imageGen.generateButton).toContainText(/\d+\s*\/\s*Image/i);
+  });
+
+  test('IMG-45 generate dengan Brand Hub', meta({ tokens: true, skip: NEED_TOKEN }), async () => {});
+  test('IMG-46 generate dari template', meta({ tokens: true, skip: NEED_TOKEN }), async () => {});
 });

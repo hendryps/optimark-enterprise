@@ -13,3 +13,6 @@ QA-tests/.qa-catalog/state/
 # TypeScript / Playwright Test
 test-results/
 blob-report/
+
+# Daftar akun dummy hasil test registrasi
+test-data/
