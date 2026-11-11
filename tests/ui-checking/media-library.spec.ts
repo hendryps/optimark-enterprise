@@ -11,8 +11,14 @@
  *   - Test yang butuh aset (grup "Aset dari staging") otomatis di-SKIP kalau akun QA belum punya media.
  *     Skip bukan berarti lolos: upload dulu beberapa gambar/video/folder ke akun QA supaya test ini jalan.
  *
- * AMAN: tidak ada yang disimpan atau dihapus. Dialog selalu ditutup dengan Batal/Tutup/Escape,
+ * AMAN (run default): tidak ada yang disimpan atau dihapus. Dialog selalu ditutup dengan Batal/Tutup/Escape,
  *       dialog konfirmasi hapus tidak pernah dikonfirmasi, dan tidak ada token AI yang terpakai.
+ * KECUALI grup "L. Alur data" (tag @destructive): upload, buat folder, pindah, dan hapus SUNGGUHAN di staging.
+ *       Hanya jalan lewat `npm run test:ui:destructive`. Data uji bernama unik "QA Auto <angka>" /
+ *       "qa auto <angka>.jpg|mp4" dan dihapus otomatis setelah tiap test (termasuk sisa run yang gagal).
+ *
+ * TAG (dari mind map QA): @auto-ui = cek UI otomatis tanpa data, @perlu-data-uji = butuh media/file uji,
+ *       @destructive = mengubah data staging (wajib cleanup). Filter di laporan: ketik nama tag di kolom cari.
  *
  * Test bertanda `bug: ...` = selisih desain yang SUDAH terkonfirmasi di staging (sengaja diharapkan gagal;
  * kalau dev memperbaikinya test akan lolos dan ditandai gagal supaya tanda `bug` dilepas).
@@ -23,7 +29,13 @@
  *   STRICT_LANGUAGE=true npm run test:ui -- media-library.spec.ts   (teks wajib Indonesia seperti desain)
  */
 import type { Locator, Page } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 import { expect, meta, test } from '../../src/fixtures';
+import type { MediaLibraryPage } from '../../src/pages/media-library-page';
+import {
+  expectDialogFits, expectTidy, expectTouchTargets, expectWithinScreen, VIEWPORTS,
+} from '../ui-compare/responsive-helpers';
 import { MEDIA, TOKENS } from '../ui-compare/design-spec';
 import {
   btn, exactRx, expectPx, expectWeight, isAscending, matchOrder, textRx, textsInOrder,
@@ -82,6 +94,153 @@ function toBytes(text: string): number {
   if (!m) return Number.NaN;
   const unit = { B: 1, KB: 1024, MB: 1024 ** 2, GB: 1024 ** 3 }[m[2].toUpperCase() as 'B' | 'KB' | 'MB' | 'GB'];
   return parseFloat(m[1].replace(',', '.')) * unit;
+}
+
+/**
+ * Temuan tablet/handphone (grup M) yang SUDAH terkonfirmasi di staging. Kunci: "MLCK-nomor|ukuran layar".
+ * Test-nya diharapkan gagal (label bug + alasan di laporan). Kalau dev memperbaiki, hapus barisnya.
+ */
+const TOUCH_BREADCRUMB = 'Area sentuh tautan breadcrumb "Dashboard" hanya 71x20px (minimal 32px)';
+const HOVER_ONLY = 'Aksi kartu media (Move/Download/Delete) hanya muncul saat hover; di layar sentuh tidak terlihat';
+const TOOLBAR_360 = 'Di layar 360px baris tab menimpa toolbar: "Images" menimpa tombol Filter, "Articles" menimpa List view';
+const FILTER_OFFSCREEN = 'Panel filter keluar dari sisi kiri layar, opsi Source/Ratio terpotong';
+const UPLOAD_LONG_NAME = 'Dialog Upload melebar sampai 582px saat nama file panjang; dialog, Cancel, dan Upload keluar dari layar';
+const UPLOAD_LANDSCAPE = 'Dialog Upload (494px) lebih tinggi dari layar landscape 390px, tidak bisa di-scroll; Cancel/Upload tidak terjangkau';
+const MOVE_DIALOG_WIDE = 'Dialog "Move media to…" selebar 404px melebihi layar; tombol Close, New folder, Move here terpotong';
+const BACK_WRAP = 'Tombol kembali berisi nama folder pecah dua baris di handphone';
+const KNOWN_BUGS_MOBILE: Record<string, string> = {
+  'MLCK-77|tablet 768': TOUCH_BREADCRUMB,
+  'MLCK-77|handphone 390': TOUCH_BREADCRUMB,
+  'MLCK-77|handphone kecil 360': TOUCH_BREADCRUMB,
+  'MLCK-77|handphone landscape 844': TOUCH_BREADCRUMB,
+  'MLCK-78|tablet 768': HOVER_ONLY,
+  'MLCK-78|handphone 390': HOVER_ONLY,
+  'MLCK-78|handphone kecil 360': `${HOVER_ONLY}; ${TOOLBAR_360}`,
+  'MLCK-72|handphone 390': FILTER_OFFSCREEN,
+  'MLCK-72|handphone kecil 360': `${FILTER_OFFSCREEN}; ${TOOLBAR_360}`,
+  'MLCK-69|handphone kecil 360': TOOLBAR_360,
+  'MLCK-71|handphone kecil 360': TOOLBAR_360,
+  'MLCK-73|handphone kecil 360': TOOLBAR_360,
+  'MLCK-76|handphone kecil 360': TOOLBAR_360,
+  'MLCK-79|handphone kecil 360': TOOLBAR_360,
+  'MLCK-75|handphone 390': UPLOAD_LONG_NAME,
+  'MLCK-75|handphone kecil 360': UPLOAD_LONG_NAME,
+  'MLCK-75|handphone landscape 844': UPLOAD_LANDSCAPE,
+  'MLCK-81|handphone 390': MOVE_DIALOG_WIDE,
+  'MLCK-81|handphone kecil 360': MOVE_DIALOG_WIDE,
+  'MLCK-81|handphone landscape 844': 'Dialog "Move media to…" di landscape 390px: tombol Cancel dan Move here tidak terjangkau walau di-scroll',
+  'MLCK-78|handphone landscape 844': HOVER_ONLY,
+  'MLCK-80|handphone 390': BACK_WRAP,
+  'MLCK-80|handphone kecil 360': `${BACK_WRAP}; ${TOOLBAR_360}`,
+};
+
+// =====================================================================================
+// Data uji di staging (dipakai grup L dan M yang bertag @destructive)
+// =====================================================================================
+/** Data uji: nama folder hanya huruf/angka/spasi (aturan staging); nama file huruf kecil. */
+const QA_FOLDER = /^QA Auto \d+/; // tanpa $: ikut membersihkan nama tidak valid yang lolos (MLCK-61)
+const QA_FILE = /^qa auto \d+\.(jpg|mp4)$/;
+const uniq = (): string => `${Date.now()}${Math.floor(Math.random() * 90 + 10)}`;
+
+/** File uji kecil di repo (test-data/). */
+const SAMPLE = {
+  image: { file: 'test-data/sample-image.jpg', mimeType: 'image/jpeg', ext: 'jpg' },
+  video: { file: 'test-data/sample-video.mp4', mimeType: 'video/mp4', ext: 'mp4' },
+} as const;
+
+const regionOf = (page: Page): Locator => mainOf(page).getByRole('region', { name: textRx(MEDIA.title) });
+const folderCard = (page: Page, name: string): Locator =>
+  regionOf(page).getByRole('link').filter({ has: page.getByRole('heading', { name, exact: true }) });
+const mediaCard = (page: Page, name: string): Locator =>
+  regionOf(page).getByRole('button').filter({ has: page.getByRole('heading', { name, exact: true }) });
+
+/** Tunggu daftar termuat: ada kartu (folder/media, h2) atau pesan kosong. */
+async function waitList(page: Page): Promise<void> {
+  await expect(regionOf(page).getByRole('heading', { level: 2 }).or(emptyText(page)).first()).toBeVisible({ timeout: 20_000 });
+}
+
+async function openFolderDialog(page: Page): Promise<Locator> {
+  await btn(mainOf(page), MEDIA.createFolder).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  return dialog;
+}
+
+async function createFolder(page: Page, name: string): Promise<void> {
+  const dialog = await openFolderDialog(page);
+  await dialog.getByRole('textbox').fill(name);
+  await btn(dialog, MEDIA.folderDialog.create).click();
+  await expect(dialog, 'Dialog Folder Baru menutup setelah folder dibuat').toBeHidden({ timeout: 15_000 });
+  await expect(folderCard(page, name), `Folder "${name}" tampil di daftar`).toBeVisible({ timeout: 15_000 });
+}
+
+async function uploadFile(page: Page, kind: keyof typeof SAMPLE, name: string): Promise<void> {
+  const sample = SAMPLE[kind];
+  test.skip(!fs.existsSync(sample.file), `File uji ${sample.file} tidak ada di repo`);
+  await btn(mainOf(page), MEDIA.upload).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await page.locator('input[type=file]').first().setInputFiles({
+    name, mimeType: sample.mimeType, buffer: fs.readFileSync(path.resolve(sample.file)),
+  });
+  await expect(dialog.getByText(name), 'File terpilih tampil di daftar dialog upload').toBeVisible();
+  await btn(dialog, MEDIA.upload).click();
+  await expect(dialog, 'Dialog upload menutup setelah upload selesai').toBeHidden({ timeout: 60_000 });
+  await expect(mediaCard(page, name), `Media "${name}" tampil di daftar`).toBeVisible({ timeout: 30_000 });
+}
+
+/** Konfirmasi dialog "Delete this item?". */
+async function confirmDelete(page: Page): Promise<void> {
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.getByText(textRx(MEDIA.confirmDelete.note))).toBeVisible();
+  await btn(dialog, MEDIA.confirmDeleteButton).click();
+  await expect(dialog).toBeHidden({ timeout: 15_000 });
+}
+
+async function deleteMedia(page: Page, name: string): Promise<void> {
+  const card = mediaCard(page, name);
+  await card.hover();
+  await card.getByRole('button', { name: exactRx(MEDIA.cardActions[2]) }).click();
+  await confirmDelete(page);
+  await expect(card).toHaveCount(0, { timeout: 15_000 });
+}
+
+async function deleteFolder(page: Page, name: string): Promise<void> {
+  const card = folderCard(page, name);
+  await card.getByRole('button', { name: /actions for folder|menu folder|aksi folder/i }).click();
+  await card.getByRole('button', { name: exactRx(MEDIA.folderMenu[2]) }).click();
+  await confirmDelete(page);
+  await expect(card).toHaveCount(0, { timeout: 15_000 });
+}
+
+/** Hapus semua media "qa auto ..." di tampilan saat ini. */
+async function deleteAllQaMedia(page: Page): Promise<void> {
+  await waitList(page);
+  for (let i = 0; i < 20; i++) {
+    const heading = regionOf(page).getByRole('heading', { level: 2, name: QA_FILE }).first();
+    if (!(await heading.count())) break;
+    await deleteMedia(page, (await heading.innerText()).trim());
+  }
+}
+
+/** Cleanup: hapus semua data uji "QA Auto" (juga sisa run sebelumnya yang gagal di tengah jalan). */
+async function cleanupQaData(mediaLibrary: MediaLibraryPage): Promise<void> {
+  const page = mediaLibrary.page;
+  if (page.isClosed()) return;
+  await mediaLibrary.open();
+  await waitList(page);
+  for (let i = 0; i < 20; i++) {
+    const heading = regionOf(page).getByRole('link').getByRole('heading', { name: QA_FOLDER }).first();
+    if (!(await heading.count())) break;
+    const name = (await heading.innerText()).trim();
+    await heading.click(); // isi folder dihapus dulu supaya tidak ada media yatim
+    await expect(page).toHaveURL(/\/media-library\/.+/);
+    await deleteAllQaMedia(page);
+    await mediaLibrary.open();
+    await waitList(page);
+    await deleteFolder(page, name);
+  }
+  await deleteAllQaMedia(page);
 }
 
 test.describe('UI Checking - Media Library', () => {
@@ -166,7 +325,7 @@ test.describe('UI Checking - Media Library', () => {
   // ===================================================================================
   // B. TAB TIPE MEDIA
   // ===================================================================================
-  test.describe('B. Tab tipe media', () => {
+  test.describe('B. Tab tipe media', { tag: '@auto-ui' }, () => {
     test('MLCK-08 empat tab tersedia', async ({ mediaLibrary }) => {
       for (const [i, tab] of MEDIA.tabs.entries()) {
         await expect.soft(tabOf(mediaLibrary.page, i), `Tab "${tab.id}" harus ada`).toBeVisible();
@@ -233,7 +392,7 @@ test.describe('UI Checking - Media Library', () => {
   // ===================================================================================
   // C. FILTER dan TAMPILAN
   // ===================================================================================
-  test.describe('C. Filter dan tampilan', () => {
+  test.describe('C. Filter dan tampilan', { tag: '@auto-ui' }, () => {
     const openFilter = async (page: Page) => {
       await page.getByRole('button', { name: textRx(MEDIA.filterAriaLabel) }).first().click();
     };
@@ -355,7 +514,7 @@ test.describe('UI Checking - Media Library', () => {
   // ===================================================================================
   // D. DIALOG FOLDER dan UPLOAD
   // ===================================================================================
-  test.describe('D. Dialog', () => {
+  test.describe('D. Dialog', { tag: '@auto-ui' }, () => {
     const d = MEDIA.folderDialog;
     const openFolderDialog = async (page: Page) => {
       await btn(mainOf(page), MEDIA.createFolder).click();
@@ -550,7 +709,7 @@ test.describe('UI Checking - Media Library', () => {
   // ===================================================================================
   // F. ASET DARI STAGING (butuh media di akun QA; kalau kosong semua test di grup ini dilewati)
   // ===================================================================================
-  test.describe('F. Aset dari staging', () => {
+  test.describe('F. Aset dari staging', { tag: '@perlu-data-uji' }, () => {
     test('MLCK-41 semua gambar aset berhasil dimuat', async ({ mediaLibrary }) => {
       // Desain: tidak ada thumbnail rusak. Aset diambil dari staging; naturalWidth > 0 artinya gambar termuat.
       const page = mediaLibrary.page;
@@ -675,7 +834,7 @@ test.describe('UI Checking - Media Library', () => {
   // ===================================================================================
   // G. FOLDER (butuh folder di akun QA)
   // ===================================================================================
-  test.describe('G. Folder dari staging', () => {
+  test.describe('G. Folder dari staging', { tag: '@perlu-data-uji' }, () => {
     /** Kartu folder pertama: elemen yang menampilkan teks "n media"/"Belum ada media". */
     const folderCard = (page: Page): Locator =>
       mainOf(page).getByText(/\d+\s+(media|items?)|belum ada (media|aset)|no (media|items)/i).first()
@@ -720,7 +879,7 @@ test.describe('UI Checking - Media Library', () => {
   // ===================================================================================
   // H. VIDEO (butuh video di akun QA)
   // ===================================================================================
-  test.describe('H. Video dari staging', () => {
+  test.describe('H. Video dari staging', { tag: '@perlu-data-uji' }, () => {
     test('MLCK-52 kartu video: ikon play dan badge durasi', async ({ mediaLibrary }) => {
       // Desain: video punya overlay tombol play dan badge durasi format dua digit "00:30".
       const page = mediaLibrary.page;
@@ -779,6 +938,398 @@ test.describe('UI Checking - Media Library', () => {
       expect(box && box.y >= 0 && box.y < 200, `Tab harus tetap terlihat di atas setelah scroll (y=${box?.y})`).toBe(true);
     });
   });
+
+  // ===================================================================================
+  // K. ROUTE
+  // ===================================================================================
+  test.describe('K. Route', { tag: '@auto-ui' }, () => {
+    test('MLCK-60 halaman terbuka di route /media-library (URL langsung dan menu sidebar)', async ({ mediaLibrary }) => {
+      // Mind map: route /media-library. Fixture membuka lewat URL langsung; lalu dicek juga lewat menu sidebar.
+      const page = mediaLibrary.page;
+      await expect(page).toHaveURL(/\/media-library\/?$/);
+      await expect.soft(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText(textRx(MEDIA.title));
+      await mediaLibrary.goto('/dashboard');
+      await mediaLibrary.openMenu('Media Library');
+      await expect(page).toHaveURL(/\/media-library\/?$/);
+      await expect(page.getByRole('heading', { level: 1, name: textRx(MEDIA.title) })).toBeVisible();
+    });
+  });
+
+  // ===================================================================================
+  // L. ALUR DATA: upload, buat folder, validasi nama, pindah, hapus (MENGUBAH DATA STAGING)
+  //    Hanya jalan lewat `npm run test:ui:destructive`. Cleanup otomatis setelah tiap test.
+  // ===================================================================================
+  test.describe('L. Alur data (mengubah data staging)', { tag: '@destructive' }, () => {
+    test.afterEach(async ({ mediaLibrary }) => cleanupQaData(mediaLibrary));
+
+    test('MLCK-61 nama folder dengan karakter khusus ditolak', async ({ mediaLibrary }) => {
+      // Mind map: validasi nama folder, karakter khusus. Staging: hanya huruf, angka, dan spasi;
+      // pesan muncul setelah klik Buat Folder dan dialog tetap terbuka.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const id = uniq();
+      const invalidNames = [`QA Auto ${id}-a`, `QA Auto ${id}/a`, `QA Auto ${id}@#`, `QA Auto ${id}<b>`, `QA Auto ${id}.`];
+      const dialog = await openFolderDialog(page);
+      for (const name of invalidNames) {
+        await dialog.getByRole('textbox').fill(name);
+        await btn(dialog, MEDIA.folderDialog.create).click();
+        await expect.soft(dialog.getByText(textRx(MEDIA.folderNameInvalid)), `Pesan validasi untuk "${name}"`).toBeVisible();
+        await expect.soft(dialog, `Dialog tetap terbuka untuk "${name}"`).toBeVisible();
+        if (!(await dialog.isVisible())) await openFolderDialog(page);
+      }
+      await btn(dialog, MEDIA.folderDialog.cancel).click();
+      for (const name of invalidNames) await expect.soft(folderCard(page, name), `Folder "${name}" tidak boleh terbuat`).toHaveCount(0);
+    });
+
+    test('MLCK-62 buat folder dengan nama valid', async ({ mediaLibrary }) => {
+      // Mind map: Create Folder. Nama unik huruf + angka + spasi -> folder tampil di daftar, pesan kosong hilang.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const name = `QA Auto ${uniq()}`;
+      await createFolder(page, name);
+      await expect.soft(page.getByText(textRx(MEDIA.emptyStates.noMedia)).first(), 'Daftar terisi, pesan kosong tidak tampil').toBeHidden();
+    });
+
+    test('MLCK-63 nama folder duplikat tidak bisa dibuat', async ({ mediaLibrary }) => {
+      // Mind map: validasi nama folder, duplikat. Staging: tombol Buat Folder nonaktif untuk nama yang sudah ada.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const name = `QA Auto ${uniq()}`;
+      await createFolder(page, name);
+      const dialog = await openFolderDialog(page);
+      await dialog.getByRole('textbox').fill(name);
+      const create = btn(dialog, MEDIA.folderDialog.create);
+      if (await create.isEnabled()) await create.click(); // perilaku lain yang diterima: diklik tetapi ditolak
+      await expect.soft(folderCard(page, name), 'Hanya ada satu folder dengan nama ini').toHaveCount(1);
+      if (await dialog.isVisible()) await btn(dialog, MEDIA.folderDialog.cancel).click();
+    });
+
+    test('MLCK-64 hapus folder lewat menu folder', async ({ mediaLibrary }) => {
+      // Mind map: aksi Delete. Menu folder -> Delete folder -> konfirmasi "Delete this item?" -> folder hilang.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const name = `QA Auto ${uniq()}`;
+      await createFolder(page, name);
+      await deleteFolder(page, name);
+    });
+
+    test('MLCK-65 upload gambar jpg', { tag: '@perlu-data-uji' }, async ({ mediaLibrary }) => {
+      // Mind map: Upload + file uji jpg di repo. Gambar tampil di daftar, termuat, dan ada di tab Images.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const name = `qa auto ${uniq()}.jpg`;
+      await uploadFile(page, 'image', name);
+      const card = mediaCard(page, name);
+      await expect.soft(card).toContainText(/image\/jpeg/i);
+      await expect.soft(card.locator('img')).toHaveJSProperty('complete', true);
+      await tabOf(page, 1).click();
+      await expect.soft(mediaCard(page, name), 'Tampil di tab Images').toBeVisible();
+      await tabOf(page, 2).click();
+      await expect.soft(mediaCard(page, name), 'Tidak tampil di tab Videos').toHaveCount(0);
+    });
+
+    test('MLCK-66 upload video mp4', { tag: '@perlu-data-uji' }, async ({ mediaLibrary }) => {
+      // Mind map: Upload + file uji mp4 di repo. Video tampil di daftar dan di tab Videos.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const name = `qa auto ${uniq()}.mp4`;
+      await uploadFile(page, 'video', name);
+      await expect.soft(mediaCard(page, name)).toContainText(/video\/mp4/i);
+      await tabOf(page, 2).click();
+      await expect.soft(mediaCard(page, name), 'Tampil di tab Videos').toBeVisible();
+      await tabOf(page, 1).click();
+      await expect.soft(mediaCard(page, name), 'Tidak tampil di tab Images').toHaveCount(0);
+    });
+
+    test('MLCK-67 pindahkan media ke folder', { tag: '@perlu-data-uji' }, async ({ mediaLibrary }) => {
+      // Mind map: aksi Move to folder. Media hilang dari root dan muncul di dalam folder tujuan.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const folder = `QA Auto ${uniq()}`;
+      const file = `qa auto ${uniq()}.jpg`;
+      await createFolder(page, folder);
+      await uploadFile(page, 'image', file);
+      const card = mediaCard(page, file);
+      await card.hover();
+      await card.getByRole('button', { name: exactRx(MEDIA.cardActions[0]) }).click();
+      const dialog = page.getByRole('dialog', { name: textRx(MEDIA.moveDialog.title) });
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole('button', { name: folder, exact: true }).click();
+      await btn(dialog, MEDIA.moveDialog.confirm).click();
+      await expect(dialog).toBeHidden({ timeout: 15_000 });
+      await expect.soft(mediaCard(page, file), 'Media tidak lagi di root').toHaveCount(0, { timeout: 15_000 });
+      await folderCard(page, folder).getByRole('heading').click();
+      await expect(page).toHaveURL(/\/media-library\/.+/);
+      await expect(mediaCard(page, file), 'Media ada di dalam folder tujuan').toBeVisible({ timeout: 15_000 });
+    });
+
+    test('MLCK-68 hapus media dengan konfirmasi', { tag: '@perlu-data-uji' }, async ({ mediaLibrary }) => {
+      // Mind map: aksi Delete. Hapus -> dialog "Delete this item?" -> media hilang dari daftar.
+      const page = mediaLibrary.page;
+      await waitList(page);
+      const name = `qa auto ${uniq()}.jpg`;
+      await uploadFile(page, 'image', name);
+      await deleteMedia(page, name);
+    });
+  });
+
+  // ===================================================================================
+  // M. TABLET & HANDPHONE: UI/UX harus rapi dan tidak berantakan di layar kecil
+  //    Tiap test jalan di 4 ukuran (VIEWPORTS): tablet 768, handphone 390, handphone kecil 360,
+  //    handphone landscape 844x390. "Rapi" = tidak scroll ke samping, tidak terpotong/menimpa,
+  //    teks tidak pecah, dialog muat, area sentuh >= 32px (lihat ui-compare/responsive-helpers.ts).
+  // ===================================================================================
+  for (const vp of VIEWPORTS) {
+    test.describe(`M. Tablet & Handphone [${vp.name}]`, () => {
+      const id = (n: number, title: string) => `MLCK-${n} [${vp.name}] ${title}`;
+      /** Temuan terkonfirmasi untuk ukuran layar ini (KNOWN_BUGS_MOBILE) -> test diharapkan gagal. */
+      const known = (n: number) => {
+        const bug = KNOWN_BUGS_MOBILE[`MLCK-${n}|${vp.name}`];
+        return meta(bug ? { bug } : {});
+      };
+      const where = `di ${vp.name}`;
+
+      test.beforeEach(async ({ mediaLibrary }) => {
+        // Ubah ukuran lalu muat ulang supaya tata letak responsif dihitung dari awal.
+        const page = mediaLibrary.page;
+        await page.setViewportSize({ width: vp.width, height: vp.height });
+        await page.reload();
+        await expect(btn(mainOf(page), MEDIA.upload)).toBeVisible({ timeout: 20_000 });
+        await waitList(page);
+      });
+
+      // ---------------------------------------------------------- tanpa data (run default)
+      test.describe('tampilan', { tag: '@auto-ui' }, () => {
+        test(id(69, 'halaman rapi'), known(69), async ({ mediaLibrary }) => {
+          await expectTidy(mediaLibrary.page, `Media Library ${where}`);
+        });
+
+        test(id(70, 'header: judul, cari, Buat Folder, Upload di dalam layar'), known(70), async ({ mediaLibrary }) => {
+          // Elemen header boleh turun baris, tetapi harus utuh di dalam layar dan judul tidak pecah dua baris.
+          const page = mediaLibrary.page;
+          const h1 = page.getByRole('heading', { level: 1, name: textRx(MEDIA.title) });
+          const targets: [string, Locator][] = [
+            ['judul', h1],
+            ['kolom cari', page.getByPlaceholder(textRx(MEDIA.searchPlaceholder)).or(regionOf(page).getByRole('searchbox')).first()],
+            ['Buat Folder', btn(mainOf(page), MEDIA.createFolder)],
+            ['Upload', btn(mainOf(page), MEDIA.upload)],
+          ];
+          for (const [name, l] of targets) {
+            await expect.soft(l, `${name} terlihat`).toBeVisible();
+            await expectWithinScreen(page, l, name);
+          }
+          expect.soft((await h1.boundingBox())?.height ?? 0, 'Judul tidak boleh pecah dua baris').toBeLessThanOrEqual(40);
+        });
+
+        test(id(71, 'tab kategori terjangkau, bisa dipindah, tetap rapi'), known(71), async ({ mediaLibrary }) => {
+          // Mind map: tab All/Images/Videos/Articles. Di layar kecil boleh digeser, tapi tiap tab bisa diketuk dan aktif.
+          const page = mediaLibrary.page;
+          for (const i of [1, 2, 3, 0]) {
+            const tab = tabOf(page, i);
+            await tab.scrollIntoViewIfNeeded();
+            await expectWithinScreen(page, tab, `Tab ${MEDIA.tabs[i].id}`);
+            await tab.click();
+            expect.soft(await mediaLibrary.isActive(tab), `Tab ${MEDIA.tabs[i].id} aktif setelah diketuk`).toBe(true);
+            await expectTidy(page, `Tab ${MEDIA.tabs[i].id} ${where}`);
+          }
+        });
+
+        test(id(72, 'panel filter muat di layar'), known(72), async ({ mediaLibrary }) => {
+          // Mind map: filter media. Semua opsi Source dan Ratio terlihat utuh di dalam layar.
+          const page = mediaLibrary.page;
+          const filter = page.getByRole('button', { name: textRx(MEDIA.filterAriaLabel) }).first();
+          await filter.scrollIntoViewIfNeeded();
+          await filter.click();
+          for (const o of [...MEDIA.filterGroups.source.options, ...MEDIA.filterGroups.ratio.options]) {
+            const item = page.getByText(exactRx(o)).filter({ visible: true }).first();
+            await expect.soft(item, `Opsi "${o.id}" terlihat`).toBeVisible();
+            await expectWithinScreen(page, item, `Opsi filter "${o.id}"`);
+          }
+          await expectTidy(page, `Panel filter ${where}`);
+          await page.keyboard.press('Escape');
+        });
+
+        test(id(73, 'Grid view dan List view rapi'), known(73), async ({ mediaLibrary }) => {
+          // Mind map: tampilan Grid / List. Berpindah tampilan tidak membuat halaman melebar atau berantakan.
+          const page = mediaLibrary.page;
+          for (const v of [1, 0]) {
+            const view = page.getByRole('button', { name: textRx(MEDIA.views[v]) }).first();
+            await view.scrollIntoViewIfNeeded();
+            await view.click();
+            expect.soft(await mediaLibrary.isActive(view), `${MEDIA.views[v].id} aktif`).toBe(true);
+            await expectTidy(page, `${MEDIA.views[v].id} ${where}`);
+          }
+        });
+
+        test(id(74, 'dialog Folder Baru muat di layar (nama panjang)'), known(74), async ({ mediaLibrary }) => {
+          // Mind map: dialog New Folder (field Folder name, Cancel, Create Folder). Nama 60 huruf tidak merusak dialog.
+          const page = mediaLibrary.page;
+          const dialog = await openFolderDialog(page);
+          const input = dialog.getByRole('textbox').first();
+          await input.fill('Folder nama panjang untuk cek tampilan di layar kecil QA 60');
+          const d = MEDIA.folderDialog;
+          await expectDialogFits(page, dialog, [input, btn(dialog, d.cancel), btn(dialog, d.create)]);
+          await expectTidy(page, `Dialog Folder Baru ${where}`, { root: dialog });
+          await btn(dialog, d.cancel).click();
+        });
+
+        test(id(75, 'dialog Upload muat di layar setelah file dipilih'), known(75), async ({ mediaLibrary }) => {
+          // Mind map: Upload. File dipilih (TIDAK diunggah): daftar file dengan nama panjang + tombol Remove tetap rapi.
+          const page = mediaLibrary.page;
+          await btn(mainOf(page), MEDIA.upload).click();
+          const dialog = page.getByRole('dialog');
+          await expect(dialog).toBeVisible();
+          const name = 'qa auto nama file gambar yang cukup panjang untuk cek layar kecil.jpg';
+          await page.locator('input[type=file]').first().setInputFiles({
+            name, mimeType: SAMPLE.image.mimeType, buffer: fs.readFileSync(path.resolve(SAMPLE.image.file)),
+          });
+          const fileItem = dialog.getByRole('listitem').filter({ hasText: name });
+          await expect(fileItem, 'File terpilih tampil di dialog').toBeVisible();
+          await expectWithinScreen(page, fileItem, 'Baris file terpilih');
+          await expectDialogFits(page, dialog, [btn(dialog, MEDIA.folderDialog.cancel), btn(dialog, MEDIA.upload)]);
+          await expectTidy(page, `Dialog Upload ${where}`, { root: dialog });
+          await page.keyboard.press('Escape'); // batal: tidak ada yang diunggah (Escape: tombol Cancel bisa di luar layar)
+          await expect(dialog).toBeHidden();
+        });
+
+        test(id(76, 'pencarian tanpa hasil rapi'), known(76), async ({ mediaLibrary }) => {
+          // Mind map: state daftar kosong. Pesan kosong utuh di dalam layar, toolbar tidak rusak.
+          const page = mediaLibrary.page;
+          const search = page.getByPlaceholder(textRx(MEDIA.searchPlaceholder)).or(regionOf(page).getByRole('searchbox')).first();
+          await search.scrollIntoViewIfNeeded();
+          await search.fill('zzz-tidak-ada-999');
+          await expect(emptyText(page)).toBeVisible({ timeout: 10_000 });
+          await expectWithinScreen(page, emptyText(page), 'Pesan kosong');
+          await expectTidy(page, `Pencarian tanpa hasil ${where}`);
+        });
+
+        test(id(77, 'area sentuh cukup besar'), known(77), async ({ mediaLibrary }) => {
+          // Layar sentuh: tombol, tautan, dan kolom isian minimal 32px agar nyaman diketuk jari.
+          await expectTouchTargets(mediaLibrary.page, `Media Library ${where}`);
+        });
+      });
+
+      // ---------------------------------------------------------- dengan data (npm run test:ui:destructive)
+      test.describe('dengan data', { tag: ['@destructive', '@perlu-data-uji'] }, () => {
+        test.afterEach(async ({ mediaLibrary }) => cleanupQaData(mediaLibrary));
+
+        /**
+         * Siapkan 1 folder + 1 gambar milik test ini. Dibuat di ukuran DESKTOP supaya kendala layar kecil
+         * (mis. dialog upload tidak muat di landscape, sudah dicek di MLCK-75) tidak menggagalkan persiapan data;
+         * setelah itu layar dikembalikan ke ukuran yang diuji.
+         */
+        async function seed(page: Page): Promise<{ folder: string; file: string }> {
+          const folder = `QA Auto ${uniq()}`;
+          const file = `qa auto ${uniq()}.jpg`;
+          await page.setViewportSize(DESKTOP);
+          await createFolder(page, folder);
+          await uploadFile(page, 'image', file);
+          await page.setViewportSize({ width: vp.width, height: vp.height });
+          await page.reload();
+          await waitList(page);
+          return { folder, file };
+        }
+
+        test(id(78, 'kartu folder dan media rapi, aksi bisa diketuk tanpa hover'), known(78), async ({ mediaLibrary }) => {
+          // Mind map: aksi media Move / Delete. Di layar sentuh tidak ada hover, jadi aksi kartu harus tetap terlihat
+          // (atau ada tombol menu yang terlihat). Kartu utuh di dalam layar dan tidak saling menimpa.
+          const page = mediaLibrary.page;
+          const { folder, file } = await seed(page);
+          await expectWithinScreen(page, folderCard(page, folder), `Kartu folder "${folder}"`);
+          await expectWithinScreen(page, mediaCard(page, file), `Kartu media "${file}"`);
+          await page.mouse.move(0, 0); // tidak ada hover, seperti jari
+          const card = mediaCard(page, file);
+          const shownWithoutHover = await card.locator('button, a[href]').evaluateAll((els) => els.some((el) => {
+            let opacity = 1;
+            for (let n: Element | null = el; n; n = n.parentElement) opacity *= Number(getComputedStyle(n).opacity);
+            const r = el.getBoundingClientRect();
+            return opacity > 0.5 && r.width > 0 && r.height > 0;
+          }));
+          expect.soft(shownWithoutHover, 'Aksi kartu (Move/Download/Delete atau tombol menu) harus terlihat tanpa hover di layar sentuh').toBe(true);
+          await expectTidy(page, `Kartu folder dan media ${where}`);
+        });
+
+        test(id(79, 'List view dengan data rapi'), known(79), async ({ mediaLibrary }) => {
+          // Mind map: List view. Baris media + tombol aksinya utuh di dalam layar (tabel boleh digeser di areanya sendiri).
+          const page = mediaLibrary.page;
+          const { file } = await seed(page);
+          const list = page.getByRole('button', { name: textRx(MEDIA.views[1]) }).first();
+          await list.scrollIntoViewIfNeeded();
+          await list.click();
+          const row = mediaCard(page, file);
+          await expect(row).toBeVisible();
+          const actions = row.getByRole('button', { name: /actions for media|menu aset|aksi/i }).first();
+          await actions.scrollIntoViewIfNeeded();
+          await expectWithinScreen(page, actions, 'Tombol aksi baris media');
+          await expectTidy(page, `List view dengan data ${where}`);
+          await expectTouchTargets(page, `List view dengan data ${where}`, { root: regionOf(page) });
+        });
+
+        test(id(80, 'menu folder dan isi folder rapi'), known(80), async ({ mediaLibrary }) => {
+          // Mind map: Create Folder. Menu folder (Rename, Move to folder, Delete folder) muat di layar;
+          // isi folder (tombol kembali + kartu media) tetap rapi.
+          const page = mediaLibrary.page;
+          const { folder } = await seed(page);
+          const card = folderCard(page, folder);
+          await card.scrollIntoViewIfNeeded();
+          await card.getByRole('button', { name: /actions for folder|menu folder|aksi folder/i }).click();
+          for (const item of MEDIA.folderMenu) {
+            const b = card.getByRole('button', { name: exactRx(item) });
+            await expect.soft(b, `Menu "${item.id}" terlihat`).toBeVisible();
+            await expectWithinScreen(page, b, `Menu folder "${item.id}"`);
+          }
+          // Dropdown wajar menutupi kartu di bawahnya, jadi kerapian dicek di dalam kartu folder saja.
+          await expectTidy(page, `Menu folder ${where}`, { root: card });
+          await page.keyboard.press('Escape');
+          await card.getByRole('heading').click();
+          await expect(page).toHaveURL(/\/media-library\/.+/);
+          await waitList(page);
+          await expectTidy(page, `Isi folder ${where}`);
+        });
+
+        test(id(81, 'dialog Pindahkan Media dan konfirmasi hapus muat di layar'), known(81), async ({ mediaLibrary }) => {
+          // Mind map: aksi Move to folder / Delete. Kedua dialog muat, tombolnya terjangkau; semuanya dibatalkan.
+          const page = mediaLibrary.page;
+          const { file } = await seed(page);
+          const card = mediaCard(page, file);
+          await card.scrollIntoViewIfNeeded();
+          await card.hover();
+          await card.getByRole('button', { name: exactRx(MEDIA.cardActions[0]) }).click();
+          const move = page.getByRole('dialog', { name: textRx(MEDIA.moveDialog.title) });
+          await expect(move).toBeVisible();
+          await expectDialogFits(page, move, [btn(move, MEDIA.moveDialog.cancel), btn(move, MEDIA.moveDialog.confirm)]);
+          await expectTidy(page, `Dialog Pindahkan Media ${where}`, { root: move });
+          await btn(move, MEDIA.moveDialog.cancel).click();
+          await expect(move).toBeHidden();
+
+          await card.hover();
+          await card.getByRole('button', { name: exactRx(MEDIA.cardActions[2]) }).click();
+          const confirm = page.getByRole('dialog');
+          await expect(confirm.getByText(textRx(MEDIA.confirmDelete.note))).toBeVisible();
+          await expectDialogFits(page, confirm, [btn(confirm, MEDIA.confirmDelete.cancel), btn(confirm, MEDIA.confirmDeleteButton)]);
+          await expectTidy(page, `Konfirmasi hapus ${where}`, { root: confirm });
+          await btn(confirm, MEDIA.confirmDelete.cancel).click();
+          await expect(mediaCard(page, file), 'Batal hapus: media tetap ada').toBeVisible();
+        });
+
+        test(id(82, 'detail aset muat di layar'), known(82), async ({ mediaLibrary }) => {
+          // Desain: ketuk kartu membuka detail; di layar kecil pratinjau dan panel menumpuk,
+          // tombol Unduh/Hapus/Tutup terjangkau.
+          const page = mediaLibrary.page;
+          const { file } = await seed(page);
+          const card = mediaCard(page, file);
+          await card.scrollIntoViewIfNeeded();
+          await card.locator('img').first().click();
+          const dialog = page.getByRole('dialog');
+          await expect(dialog, 'Mengetuk kartu membuka detail aset').toBeVisible();
+          const actions = MEDIA.detailActions.map((a) => dialog.getByRole('button', { name: textRx(a) }).or(dialog.getByRole('link', { name: textRx(a) })).first());
+          await expectDialogFits(page, dialog, actions);
+          await expectTidy(page, `Detail aset ${where}`, { root: dialog });
+          await page.keyboard.press('Escape');
+        });
+      });
+    });
+  }
 
   // ===================================================================================
   // J. BELUM AKTIF DI PROTOTYPE (dicatat supaya tidak terlupa)

@@ -2,7 +2,7 @@
  * Helper pengecekan TAMPILAN RESPONSIF (tablet dan handphone) untuk test di folder ui-compare.
  *
  * Tujuan: memastikan UI/UX tetap rapi di layar kecil dan menu-menunya tidak berantakan.
- * Dipakai oleh brand-hub-responsive.spec.ts dan media-library-responsive.spec.ts.
+ * Dipakai oleh ui-compare/brand-hub-responsive.spec.ts dan ui-checking/media-library.spec.ts (grup M).
  */
 import { expect, type Locator, type Page } from '@playwright/test';
 
@@ -121,6 +121,9 @@ export async function auditLayout(page: Page, options: AuditOptions = {}): Promi
         if ((field(a) || field(b)) && a.parentElement?.parentElement === b.parentElement?.parentElement) continue;
         const ra = a.getBoundingClientRect();
         const rb = b.getBoundingClientRect();
+        // ikon di dalam kolom isian (mis. mata "Show password") sengaja berada di dalam kotak input
+        const inside = (o: DOMRect, i: DOMRect) => i.left >= o.left - 1 && i.right <= o.right + 1 && i.top >= o.top - 1 && i.bottom <= o.bottom + 1;
+        if ((field(a) && inside(ra, rb)) || (field(b) && inside(rb, ra))) continue;
         const w = Math.min(ra.right, rb.right) - Math.max(ra.left, rb.left);
         const h = Math.min(ra.bottom, rb.bottom) - Math.max(ra.top, rb.top);
         if (w > 2 && h > 2 && (w * h) / Math.min(ra.width * ra.height, rb.width * rb.height) > 0.1) {

@@ -39,7 +39,14 @@ export function meta(options: CaseOptions = {}): CaseDetails {
   if (options.tokens) tag.push('@tokens'); // dikecualikan dari run default
   if (options.destructive) tag.push('@destructive'); // dikecualikan dari run default
   if (options.skip) annotation.push({ type: 'skip', description: options.skip });
-  if (options.bug) annotation.push({ type: 'fail', description: `Bug diketahui: ${options.bug}` });
+  if (options.bug) {
+    // Tag @bug tampil sebagai label di laporan HTML dan bisa difilter (ketik "@bug" di kolom cari laporan).
+    // Tanpa tag ini, expected failure tercampur di kelompok "Passed" dan tidak kelihatan.
+    // Tag kedua berisi alasannya, supaya langsung terbaca di daftar test tanpa membuka detail
+    // (daftar test di laporan HTML hanya menampilkan tag, bukan anotasi).
+    tag.push('@bug', `@${options.bug}`);
+    annotation.push({ type: 'fail', description: `Bug diketahui: ${options.bug}` });
+  }
   if (options.flakyBug) annotation.push({ type: 'known-bug', description: options.flakyBug });
 
   return { tag, annotation };

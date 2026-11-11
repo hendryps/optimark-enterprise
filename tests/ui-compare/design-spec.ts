@@ -221,10 +221,100 @@ export const MEDIA = {
     note: L('Tindakan ini tidak dapat dibatalkan.', 'This action cannot be undone.'),
     cancel: L('Batal', 'Cancel'),
   },
+  /** Tombol konfirmasi di dialog hapus ("Delete this item?"). */
+  confirmDeleteButton: L('Hapus', 'Delete'),
+  /** Pesan validasi nama folder di staging (teks Indonesia belum ada di desain, dikira-kira). */
+  folderNameInvalid: L('Nama folder hanya boleh berisi huruf, angka, dan spasi.', 'Folder name must contain only letters, numbers, and spaces.'),
   /** Tombol kembali satu level saat di dalam folder. */
   folderBack: L('Media Library'),
   /** Label lain. */
   loadMore: L('Memuat lebih banyak…', 'Loading more…'),
   /** Format badge durasi video: dua digit menit (00:30). */
   durationBadge: /^\d{2}:\d{2}$/,
+};
+
+// =====================================================================================
+// AUTH (Login, Register, Forgot Password, Verify Email)
+// Sumber: teks staging versi English dan Bahasa Indonesia (pemilih bahasa di pojok halaman).
+// Belum ada desain Figma khusus auth; teks Indonesia yang belum pernah terlihat di staging ditandai "dikira-kira".
+// =====================================================================================
+export const AUTH = {
+  language: {
+    label: L('Bahasa', 'Language'),
+    english: 'English',
+    indonesian: 'Bahasa Indonesia',
+  },
+  logoAlt: 'Optimark',
+  footer: L('Semua hak dilindungi.', 'All rights reserved.'),
+  privacy: L('Kebijakan Privasi & Penghapusan Data', 'Privacy Policy & Data Deletion'),
+  google: L('Lanjutkan dengan Google', 'Continue with Google'),
+  showPassword: L('Tampilkan kata sandi', 'Show password', 'Hide password', 'Sembunyikan kata sandi'),
+  login: {
+    heading: L('Masuk', 'Welcome Back'),
+    subtitle: L('Masuk ke akun Optimark Anda', 'Sign in to your Optimark account'),
+    divider: L('Atau masuk dengan email', 'Or log in with email'),
+    email: L('Email atau username', 'Email or username'),
+    emailPlaceholder: L('nama@email.com atau username', 'name@email.com or username'),
+    password: L('Kata Sandi', 'Password'),
+    passwordPlaceholder: L('Masukkan password Anda', 'Enter your password'),
+    forgot: L('Lupa kata sandi?', 'Forgot password?'),
+    submit: L('Masuk', 'Sign In'),
+    noAccount: L('Belum punya akun?', "Don't have an account?"),
+    register: L('Daftar sekarang', 'Register'),
+    emailRequired: L('Email atau username wajib diisi.', 'Email or username is required.'),
+    passwordRequired: L('Password wajib diisi.', 'Password is required.'),
+    /** Teks Indonesia dikira-kira: staging masih menampilkan versi Inggris di mode Indonesia. */
+    invalid: L('Email atau kata sandi salah', 'Invalid email or password'),
+  },
+  register: {
+    heading: L('Buat Akun', 'Create Account'),
+    subtitle: L('Daftar ke Optimark untuk memulai', 'Sign up for Optimark to get started'),
+    divider: L('Atau daftar dengan email', 'Or register with email'),
+    fullName: L('Nama Lengkap', 'Full Name'),
+    fullNamePlaceholder: L('Masukkan nama lengkap Anda', 'Enter your full name'),
+    email: L('Email'),
+    emailPlaceholder: L('nama@email.com', 'name@email.com'),
+    password: L('Kata Sandi', 'Password'),
+    passwordPlaceholder: L('Buat password', 'Create a password'),
+    confirm: L('Konfirmasi Kata Sandi', 'Confirm Password'),
+    confirmPlaceholder: L('Masukkan kembali password Anda', 'Re-enter your password'),
+    submit: L('Buat Akun', 'Create account'),
+    haveAccount: L('Sudah punya akun?', 'Already have an account?'),
+    signIn: L('Masuk', 'Sign In'),
+    /** Aturan password, urutan sesuai tampilan. */
+    rules: [
+      L('8-15 Karakter', '8-15 Characters'),
+      L('Harus mengandung setidaknya 1 angka', 'Must contain at least 1 number'),
+      L('Harus mengandung setidaknya 1 huruf besar', 'Must contain at least 1 uppercase letter'),
+      L('Harus mengandung setidaknya 1 huruf kecil', 'Must contain at least 1 lowercase letter'),
+      L('Harus mengandung setidaknya 1 simbol', 'Must contain at least 1 symbol'),
+    ],
+    /** Teks Indonesia dikira-kira. */
+    mismatch: L('Kata sandi tidak cocok.', 'Passwords do not match.'),
+    resend: L('Kirim ulang email verifikasi', 'Resend verification email'),
+  },
+  forgot: {
+    heading: L('Reset Kata Sandi', 'Reset Password'),
+    subtitle: L('Masukkan alamat email untuk menerima tautan reset kata sandi.', 'Enter your email address to receive a password reset link.'),
+    email: L('Email'),
+    submit: L('Kirim Email', 'Send Email'),
+    back: L('Kembali ke login', 'Back to sign in'),
+    /** Layar setelah terkirim (teks Indonesia dikira-kira). */
+    sentHeading: L('Email Terkirim', 'Email Sent'),
+    sentMessage: L('Silakan cek kotak masuk/spam email Anda', 'Please check your email inbox/spam to reset your password.'),
+    resendCountdown: /(Resend available in|Kirim ulang tersedia dalam)\s*\d+\s*s/i,
+  },
+  verify: {
+    failedHeading: L('Verifikasi gagal', 'Verification failed'),
+    tokenMissing: L('Token verifikasi tidak ditemukan', 'Verification token not found'),
+    resend: L('Kirim ulang email verifikasi', 'Resend verification email'),
+    heading: L('Verifikasi Email', 'Verify Email'),
+    subtitle: L('Masukkan kata sandi Anda untuk menyelesaikan verifikasi', 'Enter your password to complete verification'),
+    submit: L('Verifikasi Email', 'Verify Email'),
+  },
+  reset: {
+    newPassword: L('Buat kata sandi baru', 'Create a new password'),
+    confirm: L('Masukkan kembali password Anda', 'Re-enter your password'),
+    save: L('Simpan', 'Save'),
+  },
 };

@@ -6,15 +6,21 @@
  *
  * Cara menjalankan:
  *   npm run test:ui                 -> semua cek UI
- *   npm run test:ui -- --grep MLUI  -> hanya sebagian (contoh: Media Library)
+ *   npm run test:ui -- --grep MLCK  -> hanya sebagian (contoh: Media Library)
  *   npm run report:ui               -> buka laporan HTML
+ *   npm run test:ui:destructive     -> ikut menjalankan test @destructive (upload/buat/hapus data di staging)
  */
 import { defineConfig } from '@playwright/test';
 import { env } from './src/config/env';
 
+/** Test @destructive (mengubah data staging) dilewati kecuali INCLUDE=destructive atau INCLUDE=all. */
+const include = (process.env.INCLUDE ?? '').toLowerCase();
+const runDestructive = include === 'destructive' || include === 'all';
+
 export default defineConfig({
   testDir: './tests', // membaca folder cek UI saja (lihat testMatch), bukan tests/e2e
   testMatch: ['ui-compare/**/*.spec.ts', 'ui-checking/**/*.spec.ts'],
+  grepInvert: runDestructive ? undefined : /@destructive/,
   globalSetup: './src/config/global-setup.ts',
   workers: 1, // akun QA dipakai bersama, jalan satu per satu
   fullyParallel: false,

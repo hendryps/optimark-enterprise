@@ -63,8 +63,17 @@ export async function openSession(browser: Browser, options: SessionOptions = {}
   // Video dikelola di sini: file video baru lengkap setelah konteks ditutup. Kalau test GAGAL video
   // dilampirkan ke laporan HTML (dan tersimpan di test-results/); kalau lolos video dibuang.
   const close = async () => {
+    // Test bertanda `bug` (expected failure, tanda ✘ di terminal) dianggap "sesuai harapan" oleh Playwright,
+    // jadi screenshot otomatisnya tidak diambil. Ambil manual supaya bukti bug tetap ada di laporan.
+    const testFailed = info.status === 'failed' || info.status === 'timedOut';
+    const knownBug = testFailed && info.expectedStatus === 'failed';
+    if (knownBug && !page.isClosed()) {
+      const shot = await page.screenshot({ fullPage: true }).catch(() => undefined);
+      if (shot) await info.attach('screenshot (bug diketahui)', { body: shot, contentType: 'image/png' });
+    }
     await context.close();
-    const failed = info.status !== info.expectedStatus && info.status !== 'skipped';
+    // Video dilampirkan untuk test yang gagal tak terduga DAN test ✘ bertanda `bug`.
+    const failed = knownBug || (info.status !== info.expectedStatus && info.status !== 'skipped');
     const videos = fs.existsSync(videoDir) ? fs.readdirSync(videoDir).filter((f) => f.endsWith('.webm')) : [];
     if (failed) {
       for (const file of videos) {

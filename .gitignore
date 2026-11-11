@@ -15,4 +15,7 @@ test-results/
 blob-report/
 
 # Daftar akun dummy hasil test registrasi
-test-data/
+test-data/*
+# File uji kecil untuk test Upload Media Library (ikut di-commit)
+!test-data/sample-image.jpg
+!test-data/sample-video.mp4

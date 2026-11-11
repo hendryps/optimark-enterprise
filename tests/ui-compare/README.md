@@ -6,10 +6,8 @@ Folder ini membandingkan tampilan **staging** (hasil kerja dev) dengan **desain 
 |---|---|---|
 | `brand-hub-ui.spec.ts` | Brand Hub | BHUI-01 .. BHUI-21 |
 | `template-ui.spec.ts` | Template (Image Generator > tab Templates/Jelajahi) | TPLUI-01 .. TPLUI-10 |
-| `media-library-ui.spec.ts` | Media Library | MLUI-01 .. MLUI-18 |
-| `../ui-checking/media-library.spec.ts` | Media Library (versi lengkap, lihat README di folder itu) | MLCK-01 .. MLCK-59 |
+| `../ui-checking/media-library.spec.ts` | **Media Library** (desktop, alur data, tablet dan handphone; lihat README di folder itu) | MLCK-01 .. MLCK-82 |
 | `brand-hub-responsive.spec.ts` | Brand Hub di tablet dan handphone | BHRS-01 .. BHRS-10 |
-| `media-library-responsive.spec.ts` | Media Library di tablet dan handphone | MLRS-01 .. MLRS-11 |
 | `responsive-helpers.ts` | Pemeriksa kerapian layar kecil (overflow, menimpa, terpotong, area sentuh, dialog) | - |
 | `design-spec.ts` | **Data desain** (teks, ukuran, urutan dari Figma) | - |
 | `ui-helpers.ts` | Helper cek teks, urutan, CSS | - |
@@ -19,7 +17,7 @@ Folder ini membandingkan tampilan **staging** (hasil kerja dev) dengan **desain 
 ```bash
 npm run test:ui                                  # semua cek UI
 npm run test:ui -- brand-hub-ui.spec.ts          # satu fitur
-npm run test:ui -- --grep "MLUI-03"              # satu test
+npm run test:ui -- --grep "BHUI-03"              # satu test
 STRICT_LANGUAGE=true npm run test:ui             # wajib teks Indonesia seperti Figma
 npm run report:ui                                # buka laporan HTML
 ```
@@ -43,10 +41,10 @@ Semua test aman: tidak menyimpan/menghapus data, tidak memakai token AI (semua d
 
 ## Tampilan responsif (tablet dan handphone)
 
-`brand-hub-responsive.spec.ts` dan `media-library-responsive.spec.ts` memastikan UI tetap rapi dan menu tidak berantakan
+`brand-hub-responsive.spec.ts` (dan grup M di `../ui-checking/media-library.spec.ts` untuk Media Library) memastikan UI tetap rapi dan menu tidak berantakan
 di layar kecil. Tiap test dijalankan di 4 ukuran (`VIEWPORTS` di `responsive-helpers.ts`):
 tablet 768x1024, handphone 390x844, handphone kecil 360x640, handphone landscape 844x390.
-Judul test memuat ukuran layarnya, mis. `MLRS-04 [handphone 390] panel filter muat di layar`.
+Judul test memuat ukuran layarnya, mis. `BHRS-04 [handphone 390] ...`.
 
 Yang diperiksa otomatis (`auditLayout`): halaman tidak melebar ke samping, elemen tidak terpotong di tepi layar,
 teks tombol/tab tidak terpotong atau pecah baris, tidak ada tombol saling menimpa, area sentuh >= 32px,
@@ -55,9 +53,8 @@ dan dialog muat di layar (bisa di-scroll di dalamnya, tombol aksi terjangkau).
 ```bash
 npm run test:ui -- brand-hub-responsive.spec.ts
 npm run test:ui -- --grep "handphone 390"
-npm run test:ui -- --grep "MLRS-04"
+npm run test:ui -- --grep "BHRS-04"
 ```
 
 Temuan terkonfirmasi ditulis di `KNOWN_BUGS` (bagian atas tiap file, kunci `nomor|ukuran layar`) dan test-nya diharapkan gagal.
 Kalau dev memperbaiki, test akan ditandai gagal: hapus barisnya dari `KNOWN_BUGS`.
-Test aset (MLRS-09, MLRS-10) skip bila akun QA belum punya media.
