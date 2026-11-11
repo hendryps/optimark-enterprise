@@ -191,5 +191,40 @@ export const MEDIA = {
     newFolder: L('Folder Baru', 'New Folder'),
     cancel: L('Batal', 'Cancel'),
     confirm: L('Pindahkan ke sini', 'Move here'),
+    close: L('Tutup', 'Close'),
   },
+
+  // ---- tambahan untuk tests/ui-checking/media-library.spec.ts (sumber: artifact prototype yang sama) ----
+  /** Ukuran (px) dari CSS prototype. */
+  size: { search: { width: 200, height: 36 }, tab: { height: 36, fontSize: 14, fontWeight: 600 }, gridColumnsDesktop: 4 },
+  /** Teks di bawah "Lepaskan File untuk Upload". */
+  dropOverlayDest: L('File akan diunggah ke Media Library.', 'Files will be uploaded to Media Library.'),
+  /** Pesan state kosong. */
+  emptyStates: {
+    noMedia: L('Belum ada media yang tersimpan', 'No media found'),
+    noSearchResult: L('Tidak ada aset yang cocok dengan pencarian.', 'No media found'),
+    noFilterResult: L('Tidak ada aset yang cocok. Coba hapus sebagian filter untuk memperluas hasil.', 'No media found'),
+  },
+  /** Menu aksi sebuah aset (kebab), urutan sesuai desain. "Hapus" berwarna merah (danger). */
+  assetMenu: {
+    trigger: L('Menu aset', 'Asset menu', 'Actions', 'More'),
+    items: [L('Pindah ke folder', 'Move to folder', 'Move'), L('Unduh', 'Download'), L('Hapus', 'Delete')],
+  },
+  /** Menu aksi sebuah folder (kebab). */
+  folderMenu: [L('Ganti nama', 'Rename'), L('Pindah ke folder', 'Move to folder', 'Move'), L('Hapus folder', 'Delete folder')],
+  /** Aksi hover di kartu grid (desktop). */
+  cardActions: [L('Pindah ke folder', 'Move to folder', 'Move'), L('Unduh', 'Download'), L('Hapus', 'Delete')],
+  /** Modal detail aset: tombol di header kanan. */
+  detailActions: [L('Unduh', 'Download'), L('Hapus', 'Delete'), L('Tutup', 'Close')],
+  /** Dialog konfirmasi hapus. */
+  confirmDelete: {
+    note: L('Tindakan ini tidak dapat dibatalkan.', 'This action cannot be undone.'),
+    cancel: L('Batal', 'Cancel'),
+  },
+  /** Tombol kembali satu level saat di dalam folder. */
+  folderBack: L('Media Library'),
+  /** Label lain. */
+  loadMore: L('Memuat lebih banyak…', 'Loading more…'),
+  /** Format badge durasi video: dua digit menit (00:30). */
+  durationBadge: /^\d{2}:\d{2}$/,
 };

@@ -13,7 +13,8 @@ import { defineConfig } from '@playwright/test';
 import { env } from './src/config/env';
 
 export default defineConfig({
-  testDir: './tests/ui-compare', // hanya membaca tests/ui-compare, bukan tests/e2e
+  testDir: './tests', // membaca folder cek UI saja (lihat testMatch), bukan tests/e2e
+  testMatch: ['ui-compare/**/*.spec.ts', 'ui-checking/**/*.spec.ts'],
   globalSetup: './src/config/global-setup.ts',
   workers: 1, // akun QA dipakai bersama, jalan satu per satu
   fullyParallel: false,
